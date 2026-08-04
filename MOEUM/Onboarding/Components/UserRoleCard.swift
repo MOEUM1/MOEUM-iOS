@@ -31,10 +31,10 @@ struct UserRoleCard: View {
                     .clipShape(Circle())
             }
             .foregroundStyle(Color.moeumGray900)
-            .padding(.horizontal, 20)
-            .frame(maxWidth: .infinity, minHeight: 132)
+            .padding(.horizontal, 16)
+            .frame(maxWidth: .infinity, minHeight: 82)
             .background(Color.moeumGray50)
-            .clipShape(RoundedRectangle(cornerRadius: 22))
+            .clipShape(RoundedRectangle(cornerRadius: 14))
         }
         .buttonStyle(.plain)
     }
