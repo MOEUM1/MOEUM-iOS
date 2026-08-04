@@ -47,7 +47,15 @@ struct ContentView: View {
         case .roleSelection:
             UserRoleSelectionView(onSelect: flow.select)
         case .studentStart:
-            StudentStartView(onBack: flow.back) {
+            StudyCategorySelectionView(
+                onBack: flow.back,
+                onContinue: flow.selectStudyTopic
+            )
+        case .studyDetail:
+            StudyDetailView(
+                topic: flow.selectedStudyTopic ?? "선택한 분야",
+                onBack: flow.back
+            ) { _ in
                 flow.move(to: .account)
             }
         case .adultStart:
