@@ -6,6 +6,7 @@ struct ContentView: View {
         case introduction
         case consent
         case welcome
+        case main
     }
 
     @State private var stage: RootStage = .splash
@@ -22,6 +23,8 @@ struct ContentView: View {
                 ConsentView { stage = .welcome }
             case .welcome:
                 signUpFlow
+            case .main:
+                MainTabView()
             }
         }
         .animation(.easeInOut(duration: 0.22), value: stage)
@@ -84,7 +87,7 @@ struct ContentView: View {
             }
         case .completion:
             SignUpCompletionView(role: flow.selectedRole ?? .student) {
-                flow.path.removeAll()
+                stage = .main
             }
         case .terms:
             TermsSelectionView(onBack: flow.back) {
