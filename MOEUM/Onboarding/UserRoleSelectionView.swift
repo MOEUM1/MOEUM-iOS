@@ -31,9 +31,9 @@ struct UserRoleSelectionView: View {
                 .foregroundStyle(Color.moeumGray300)
                 .padding(.top, 4)
 
-            Spacer()
         }
         .padding(.horizontal, 24)
+        .padding(.bottom, 36)
         .background(Color.white)
     }
 }
