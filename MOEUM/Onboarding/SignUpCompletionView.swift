@@ -4,28 +4,30 @@ struct SignUpCompletionView: View {
     let onComplete: () -> Void
 
     var body: some View {
-        VStack {
-            Spacer()
+        VStack(spacing: 0) {
+            Spacer(minLength: 138)
+
+            Image("MoeumMascot")
+                .resizable()
+                .scaledToFit()
+                .frame(width: 298, height: 321)
 
             Text("회원가입이\n완료되었어요!")
-                .font(MOEUMTypography.h2Bold)
+                .font(.custom("Pretendard-Bold", size: 28, relativeTo: .title))
                 .multilineTextAlignment(.center)
                 .foregroundStyle(Color.moeumGray900)
+                .padding(.top, 16)
 
             Spacer()
 
-            Button(action: onComplete) {
-                Text("완료")
-                    .font(MOEUMTypography.buttonBold)
-                    .foregroundStyle(.white)
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 48)
-                    .background(Color.moeumCharacterDarkYellow)
-                    .clipShape(RoundedRectangle(cornerRadius: 6))
+            MOEUMButton(
+                title: "완료",
+                enabledColor: Color.moeumCharacterDarkYellow,
+                action: onComplete
+            )
+            .padding(.bottom, 18)
             }
-        }
-        .padding(.horizontal, 20)
-        .padding(.bottom, 18)
+        .padding(.horizontal, 24)
         .background(Color.white)
     }
 }
