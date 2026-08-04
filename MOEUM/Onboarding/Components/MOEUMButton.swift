@@ -12,9 +12,9 @@ struct MOEUMButton: View {
                 .font(MOEUMTypography.buttonBold)
                 .foregroundStyle(.white)
                 .frame(maxWidth: .infinity)
-                .frame(height: 48)
-                .background(isEnabled ? enabledColor : Color.moeumGray200)
-                .clipShape(RoundedRectangle(cornerRadius: 6))
+                .frame(height: 56)
+                .background(isEnabled ? enabledColor : Color.moeumMain200)
+                .clipShape(RoundedRectangle(cornerRadius: 12))
         }
         .disabled(!isEnabled)
     }
