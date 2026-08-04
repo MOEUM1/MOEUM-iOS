@@ -47,6 +47,12 @@ struct CharacterDetail: Decodable {
     let createdAt: Date
 }
 
+struct StreakResponse: Decodable {
+    let count: Int
+    let lastDate: Date?
+    let studiedToday: Bool
+}
+
 struct LeagueResponse: Decodable {
     let totalUsers: Int
     let rankings: [LeagueRanking]
@@ -91,6 +97,10 @@ extension APIClient {
 
     func myCharacter(accessToken: String) async throws -> CharacterResponse {
         try await send("characters/me", accessToken: accessToken)
+    }
+
+    func myStreak(accessToken: String) async throws -> StreakResponse {
+        try await send("users/me/streak", accessToken: accessToken)
     }
 
     func league(accessToken: String, limit: Int = 10) async throws -> LeagueResponse {
