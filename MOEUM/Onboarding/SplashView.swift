@@ -4,16 +4,16 @@ struct SplashView: View {
     let onFinished: () -> Void
 
     var body: some View {
-        VStack(spacing: 6) {
+        VStack(spacing: 8) {
             Spacer()
 
             Text("모음")
-                .font(MOEUMTypography.h1Bold)
+                .font(.custom("OwnglyphEuiyeonChae", size: 56.364, relativeTo: .largeTitle))
                 .foregroundStyle(Color.moeumGray900)
 
-            Text("투표, 보상")
-                .font(MOEUMTypography.buttonSmallMedium)
-                .foregroundStyle(Color.moeumGray700)
+            Text("폭 넓은 경험,")
+                .font(.custom("OwnglyphEuiyeonChae", size: 24, relativeTo: .title2))
+                .foregroundStyle(Color.moeumGray900)
 
             Spacer()
         }
