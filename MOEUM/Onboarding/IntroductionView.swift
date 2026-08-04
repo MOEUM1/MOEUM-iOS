@@ -12,8 +12,8 @@ struct IntroductionView: View {
 
     var body: some View {
         VStack {
-            MOEUMWordmark()
-                .padding(.top, 52)
+            MOEUMWordmark(size: 64)
+                .padding(.top, 85)
 
             Spacer()
 
