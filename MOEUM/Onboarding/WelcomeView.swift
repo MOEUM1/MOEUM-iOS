@@ -7,7 +7,7 @@ struct WelcomeView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 18) {
-            Text("환영해요!\n오늘 어떤 감정과 생각했나요?")
+            Text("환영해요!\n오늘부터 함께 성장해볼까요?")
                 .font(MOEUMTypography.h2Bold)
                 .foregroundStyle(Color.moeumGray900)
 
