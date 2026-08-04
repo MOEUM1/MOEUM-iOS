@@ -13,14 +13,7 @@ struct ProfileNameView: View {
 
             Spacer()
 
-            HStack(spacing: 4) {
-                Spacer()
-                Text("이미 계정이 있으신가요?")
-                    .foregroundStyle(Color.moeumGray500)
-                Text("로그인")
-                    .foregroundStyle(Color.moeumMain500)
-            }
-            .font(MOEUMTypography.buttonSmallMedium)
+            ExistingAccountPrompt()
 
             MOEUMButton(title: "다음", isEnabled: !name.trimmingCharacters(in: .whitespaces).isEmpty, action: onContinue)
         }

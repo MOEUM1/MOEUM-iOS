@@ -59,3 +59,17 @@ struct PageDots: View {
         .animation(.easeInOut(duration: 0.2), value: selection)
     }
 }
+
+struct ExistingAccountPrompt: View {
+    var body: some View {
+        HStack(spacing: 4) {
+            Text("만약 계정이 있으신가요?")
+                .foregroundStyle(Color.moeumGray400)
+            Text("로그인")
+                .foregroundStyle(Color.moeumMain500)
+                .underline()
+        }
+        .font(MOEUMTypography.buttonMedium)
+        .frame(maxWidth: .infinity, alignment: .center)
+    }
+}

@@ -45,15 +45,7 @@ struct CharacterConfirmationView: View {
 
             Spacer()
 
-            HStack(spacing: 4) {
-                Spacer()
-                Text("만약 계정이 있으신가요?")
-                    .foregroundStyle(Color.moeumGray400)
-                Text("로그인")
-                    .foregroundStyle(Color.moeumMain500)
-                    .underline()
-            }
-            .font(MOEUMTypography.buttonSmallMedium)
+            ExistingAccountPrompt()
 
             MOEUMButton(title: "다음", action: onConfirm)
         }
