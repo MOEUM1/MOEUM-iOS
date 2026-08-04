@@ -98,6 +98,37 @@ struct ChatAnswerResponse: Decodable {
     let question: String
 }
 
+struct GameQuestion: Decodable, Identifiable {
+    let index: Int
+    let question: String
+    var id: Int { index }
+}
+
+struct GameStartResponse: Decodable {
+    let historyId: String
+    let subject: String
+    let questions: [GameQuestion]
+    let createdAt: Date
+}
+
+struct CardResultRequest: Encodable {
+    let endTime: Date
+    let correctIndex: [Int]
+    let wrongIndex: [Int]
+}
+
+struct CardResultResponse: Decodable {
+    let historyId: String
+    let correctCount: Int
+    let wrongCount: Int
+    let totalCount: Int
+}
+
+struct QuizAnswer: Encodable { let index: Int; let answer: String }
+struct QuizResultRequest: Encodable { let historyId: String; let input: [QuizAnswer]; let endAt: Date }
+struct QuizGrade: Decodable { let index: Int; let answer: String; let isCorrect: Bool; let correctAnswer: String; let explaination: String }
+struct QuizResultResponse: Decodable { let historyId: String; let correctCount: Int; let wrongCount: Int; let grade: [QuizGrade]; let endTime: Date }
+
 extension APIClient {
     func signUp(_ request: SignUpRequest) async throws -> AuthResponse {
         try await send("auth/signup", method: .post, body: request)
@@ -142,5 +173,21 @@ extension APIClient {
             body: ChatAnswerRequest(answer: answer),
             accessToken: accessToken
         )
+    }
+
+    func startCardGame(accessToken: String) async throws -> GameStartResponse {
+        try await send("games/card", method: .post, accessToken: accessToken)
+    }
+
+    func submitCardGame(historyId: String, correct: [Int], wrong: [Int], accessToken: String) async throws -> CardResultResponse {
+        try await send("games/card/\(historyId)/result", method: .post, body: CardResultRequest(endTime: .now, correctIndex: correct, wrongIndex: wrong), accessToken: accessToken)
+    }
+
+    func startQuizGame(accessToken: String) async throws -> GameStartResponse {
+        try await send("games/quiz", method: .post, accessToken: accessToken)
+    }
+
+    func submitQuizGame(historyId: String, answers: [QuizAnswer], accessToken: String) async throws -> QuizResultResponse {
+        try await send("games/quiz/result", method: .post, body: QuizResultRequest(historyId: historyId, input: answers, endAt: .now), accessToken: accessToken)
     }
 }
