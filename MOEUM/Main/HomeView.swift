@@ -5,6 +5,8 @@ struct HomeView: View {
     let accessToken: String
     @State private var selectedMode: LearningMode = .teaching
     @State private var isChatPresented = false
+    @State private var isCardPresented = false
+    @State private var isExamPresented = false
     @State private var character: CharacterDetail?
     @State private var streak: StreakResponse?
     private let weekdays = ["월", "화", "수", "목", "금", "토", "일"]
@@ -25,6 +27,8 @@ struct HomeView: View {
         .fullScreenCover(isPresented: $isChatPresented) {
             ChatView(theme: theme, accessToken: accessToken)
         }
+        .fullScreenCover(isPresented: $isCardPresented) { CardGameView(theme: theme, accessToken: accessToken) }
+        .fullScreenCover(isPresented: $isExamPresented) { WrittenExamView(theme: theme, accessToken: accessToken) }
         .task { await loadDashboard() }
     }
 
@@ -92,8 +96,10 @@ struct HomeView: View {
     }
 
     private func performSelectedMode() {
-        if selectedMode == .teaching {
-            isChatPresented = true
+        switch selectedMode {
+        case .teaching: isChatPresented = true
+        case .card: isCardPresented = true
+        case .test: isExamPresented = true
         }
     }
 

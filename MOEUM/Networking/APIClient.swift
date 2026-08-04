@@ -72,6 +72,7 @@ private struct APIErrorPayload: Decodable {
 }
 
 private struct APIErrorDetail: Decodable {
+    let code: String?
     let message: String?
 }
 
