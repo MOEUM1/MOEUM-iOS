@@ -1,9 +1,11 @@
 import SwiftUI
 
 struct MOEUMWordmark: View {
+    var size: CGFloat = 30
+
     var body: some View {
         Text("MOEUM")
-            .font(.custom("OwnglyphEuiyeonChae", size: 30))
+            .font(.custom("OwnglyphEuiyeonChae", size: size, relativeTo: .title))
             .foregroundStyle(Color.moeumGray900)
     }
 }
