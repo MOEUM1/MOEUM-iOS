@@ -24,7 +24,7 @@ struct CharacterSelectionView: View {
               .font(.system(size: 18, weight: .semibold))
               .foregroundStyle(Color.moeumGray900)
           }
-          PageDots(selection: 4, count: 6)
+          PageDots(selection: 4, count: 6, selectedColor: selection?.buttonColor ?? .moeumMain500)
         }
 
         Text("사용자님과 함께\n성장할 AI를 골라주세요!")
@@ -63,12 +63,13 @@ struct CharacterSelectionView: View {
 
         Spacer()
 
-        ExistingAccountPrompt()
+        ExistingAccountPrompt(accentColor: selection?.buttonColor ?? .moeumMain500)
 
         MOEUMButton(
           title: "다음",
           isEnabled: selection != nil && transitioningCharacter == nil,
-          enabledColor: selection?.buttonColor ?? .moeumMain500
+          enabledColor: selection?.buttonColor ?? .moeumMain500,
+          disabledColor: (selection?.buttonColor ?? .moeumMain500).opacity(0.4)
         ) {
           beginTransition()
         }

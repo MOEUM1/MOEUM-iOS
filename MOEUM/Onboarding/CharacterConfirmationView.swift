@@ -19,7 +19,11 @@ struct CharacterConfirmationView: View {
                         .font(.system(size: 18, weight: .semibold))
                         .foregroundStyle(Color.moeumGray900)
                 }
-                PageDots(selection: 5, count: 6)
+                PageDots(
+                    selection: 5,
+                    count: 6,
+                    selectedColor: CharacterTheme(characterName: characterName).accentColor
+                )
             }
 
             Text("\(characterName)이와 함께 하시겠어요?")
@@ -42,7 +46,7 @@ struct CharacterConfirmationView: View {
 
             Spacer()
 
-            ExistingAccountPrompt()
+            ExistingAccountPrompt(accentColor: CharacterTheme(characterName: characterName).accentColor)
 
             if let errorMessage {
                 Text(errorMessage)
@@ -55,6 +59,7 @@ struct CharacterConfirmationView: View {
                 title: isLoading ? "가입 중..." : "다음",
                 isEnabled: !isLoading,
                 enabledColor: CharacterTheme(characterName: characterName).accentColor,
+                disabledColor: CharacterTheme(characterName: characterName).accentColor.opacity(0.4),
                 action: onConfirm
             )
         }

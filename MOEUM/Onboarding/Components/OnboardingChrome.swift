@@ -47,12 +47,13 @@ struct OnboardingHeader: View {
 struct PageDots: View {
     let selection: Int
     let count: Int
+    var selectedColor = Color.moeumMain500
 
     var body: some View {
         HStack(spacing: 3) {
             ForEach(0..<count, id: \.self) { index in
                 Capsule()
-                    .fill(index == selection ? Color.moeumMain500 : Color.moeumGray200)
+                    .fill(index == selection ? selectedColor : Color.moeumGray200)
                     .frame(width: index == selection ? 22 : 7, height: 7)
             }
         }
@@ -61,12 +62,14 @@ struct PageDots: View {
 }
 
 struct ExistingAccountPrompt: View {
+    var accentColor = Color.moeumMain500
+
     var body: some View {
         HStack(spacing: 4) {
             Text("만약 계정이 있으신가요?")
                 .foregroundStyle(Color.moeumGray400)
             Text("로그인")
-                .foregroundStyle(Color.moeumMain500)
+                .foregroundStyle(accentColor)
                 .underline()
         }
         .font(MOEUMTypography.buttonMedium)
