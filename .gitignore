@@ -1,0 +1,16 @@
+# Tuist-generated Xcode files
+*.xcodeproj
+*.xcworkspace
+
+# Tuist and Xcode build artifacts
+.build/
+.derivedData/
+Derived/
+DerivedData/
+
+# User-specific Xcode state
+xcuserdata/
+*.xcuserstate
+
+# macOS
+.DS_Store
