@@ -2,7 +2,7 @@ import SwiftUI
 
 struct ProfileNameView: View {
     let onBack: () -> Void
-    let onContinue: () -> Void
+    let onContinue: (String) -> Void
     @State private var name = ""
 
     var body: some View {
@@ -15,7 +15,9 @@ struct ProfileNameView: View {
 
             ExistingAccountPrompt()
 
-            MOEUMButton(title: "다음", isEnabled: !name.trimmingCharacters(in: .whitespaces).isEmpty, action: onContinue)
+            MOEUMButton(title: "다음", isEnabled: !name.trimmingCharacters(in: .whitespaces).isEmpty) {
+                onContinue(name.trimmingCharacters(in: .whitespaces))
+            }
         }
         .padding(.horizontal, 20)
         .padding(.top, 10)
@@ -25,5 +27,5 @@ struct ProfileNameView: View {
 }
 
 #Preview {
-    ProfileNameView(onBack: {}, onContinue: {})
+    ProfileNameView(onBack: {}, onContinue: { _ in })
 }

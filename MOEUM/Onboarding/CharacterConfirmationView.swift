@@ -2,6 +2,8 @@ import SwiftUI
 
 struct CharacterConfirmationView: View {
     let characterName: String
+    var isLoading = false
+    var errorMessage: String?
     let onBack: () -> Void
     let onConfirm: () -> Void
 
@@ -47,7 +49,14 @@ struct CharacterConfirmationView: View {
 
             ExistingAccountPrompt()
 
-            MOEUMButton(title: "다음", action: onConfirm)
+            if let errorMessage {
+                Text(errorMessage)
+                    .font(MOEUMTypography.buttonSmallMedium)
+                    .foregroundStyle(Color.moeumCharacterLightRed)
+                    .frame(maxWidth: .infinity, alignment: .center)
+            }
+
+            MOEUMButton(title: isLoading ? "가입 중..." : "다음", isEnabled: !isLoading, action: onConfirm)
         }
         .padding(.horizontal, 20)
         .padding(.top, 12)
