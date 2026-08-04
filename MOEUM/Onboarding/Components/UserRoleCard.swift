@@ -10,11 +10,11 @@ struct UserRoleCard: View {
         Button(action: action) {
             HStack(spacing: 16) {
                 VStack(alignment: .leading, spacing: 8) {
-                    HStack(spacing: 12) {
+                    HStack(spacing: 8) {
                         Text(title)
-                            .font(MOEUMTypography.h2Bold)
+                            .font(MOEUMTypography.buttonBold)
                         Image(systemName: "chevron.right")
-                            .font(.system(size: 18, weight: .semibold))
+                            .font(.system(size: 14, weight: .semibold))
                     }
                     Text(subtitle)
                         .font(MOEUMTypography.bodyMedium)
