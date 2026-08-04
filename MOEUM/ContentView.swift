@@ -9,23 +9,12 @@ import SwiftUI
 
 struct ContentView: View {
     var body: some View {
-        VStack {
-            Text("안녕하세요!")
-                .font(Font.system(.title, design: .rounded))
-                .fontWeight(.bold)
-                .foregroundColor(.blue)
-                .padding(.bottom, 10)
+        HStack {
+            Text("안녕하세요~ 우리는 모음 입니다")
+                .font(.largeTitle)
+                .foregroundColor(.gray)
+                .padding()
             
-            Text("우리는 모일")
-                .font(Font.system(.title, design: .rounded))
-                .fontWeight(.bold)
-                .foregroundColor(.blue)
-                .padding(.bottom, 10)
-            
-            Text("만나서 반가워요!")
-                .font(Font.system(.title, design: .rounded))
-                .fontWeight(.bold)
-                .foregroundColor(.blue)
         }
         HStack {
             Spacer()
