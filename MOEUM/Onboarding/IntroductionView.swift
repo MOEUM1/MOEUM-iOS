@@ -5,9 +5,9 @@ struct IntroductionView: View {
     @State private var page = 0
 
     private let messages = [
-        "여러 이야기를 발견해요",
-        "여러 이야기를 나눠요",
-        "무슨 사연을 나눌까요",
+        "어떤 이야기를 넣을까",
+        "어떤 이야기를 넣지",
+        "무슨 얘기를 넣을까",
     ]
 
     var body: some View {
@@ -20,7 +20,8 @@ struct IntroductionView: View {
             TabView(selection: $page) {
                 ForEach(messages.indices, id: \.self) { index in
                     Text(messages[index])
-                        .font(MOEUMTypography.captionMedium)
+                        .font(MOEUMTypography.buttonMedium)
+                        .fontWeight(index == messages.count - 1 ? .bold : .medium)
                         .foregroundStyle(Color.moeumGray500)
                         .tag(index)
                 }
