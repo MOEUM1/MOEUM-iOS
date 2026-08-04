@@ -2,29 +2,45 @@ import SwiftUI
 
 struct CharacterSelectionView: View {
     let onBack: () -> Void
-    let onContinue: () -> Void
-    @State private var selection: String?
+    let onContinue: (String) -> Void
+    @State private var selection: CharacterOption?
 
-    private let characters = ["시우", "우린", "대훈", "유하"]
+    private let characters = [
+        CharacterOption(name: "대훈", assetName: "MoeumMascot"),
+        CharacterOption(name: "우린", assetName: "MoeumCharacterRed"),
+        CharacterOption(name: "시우", assetName: "MoeumCharacterBlue"),
+        CharacterOption(name: "유하", assetName: "MoeumCharacterPink"),
+    ]
 
     var body: some View {
         VStack(alignment: .leading, spacing: 18) {
-            OnboardingHeader(title: "사용자님과 함께\n성장할 시우를 골라주세요!", onBack: onBack)
+            HStack(spacing: 14) {
+                Button(action: onBack) {
+                    Image(systemName: "chevron.left")
+                        .font(.system(size: 18, weight: .semibold))
+                        .foregroundStyle(Color.moeumGray900)
+                }
+                PageDots(selection: 4, count: 6)
+            }
+
+            Text("사용자님과 함께\n성장할 시우를 골라주세요!")
+                .font(MOEUMTypography.h2Bold)
+                .foregroundStyle(Color.moeumGray900)
 
             LazyVGrid(columns: [.init(), .init()], spacing: 24) {
-                ForEach(characters, id: \.self) { character in
+                ForEach(characters) { character in
                     Button {
                         selection = character
                     } label: {
                         VStack(spacing: 6) {
-                            Image("MoeumMascot")
+                            Image(character.assetName)
                                 .resizable()
                                 .scaledToFit()
                                 .frame(width: 94, height: 94)
                                 .padding(8)
                                 .background(selection == character ? Color.moeumMain50 : Color.clear)
                                 .clipShape(RoundedRectangle(cornerRadius: 12))
-                            Text(character)
+                            Text(character.name)
                                 .font(MOEUMTypography.captionBold)
                                 .foregroundStyle(Color.moeumGray900)
                         }
@@ -44,7 +60,11 @@ struct CharacterSelectionView: View {
             }
             .font(MOEUMTypography.buttonSmallMedium)
 
-            MOEUMButton(title: "다음", isEnabled: selection != nil, action: onContinue)
+            MOEUMButton(title: "다음", isEnabled: selection != nil) {
+                if let selection {
+                    onContinue(selection.name)
+                }
+            }
         }
         .padding(.horizontal, 20)
         .padding(.top, 10)
@@ -54,5 +74,11 @@ struct CharacterSelectionView: View {
 }
 
 #Preview {
-    CharacterSelectionView(onBack: {}, onContinue: {})
+    CharacterSelectionView(onBack: {}, onContinue: { _ in })
+}
+
+private struct CharacterOption: Identifiable, Equatable {
+    let name: String
+    let assetName: String
+    var id: String { name }
 }
