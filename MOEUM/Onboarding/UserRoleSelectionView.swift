@@ -22,6 +22,13 @@ struct UserRoleSelectionView: View {
             ) {
                 onSelect(.adult)
             }
+
+            Text("나중에 변경 가능합니다.")
+                .font(MOEUMTypography.bodyMedium)
+                .foregroundStyle(Color.moeumGray300)
+                .padding(.top, 4)
+
+            Spacer()
         }
         .padding(.horizontal, 24)
         .background(Color.white)
