@@ -15,7 +15,7 @@ struct StudyCategorySelectionView: View {
                         .foregroundStyle(Color.moeumGray900)
                 }
 
-                PageDots(selection: 3, count: 6)
+                PageDots(selection: 2, count: 6)
             }
 
             Text("사용자님이\n공부할 카테고리를 선택해보세요.")

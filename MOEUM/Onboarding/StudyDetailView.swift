@@ -14,7 +14,7 @@ struct StudyDetailView: View {
                         .font(.system(size: 18, weight: .semibold))
                         .foregroundStyle(Color.moeumGray900)
                 }
-                PageDots(selection: 4, count: 6)
+                PageDots(selection: 3, count: 6)
             }
 
             Text("더 자세히 알려주세요!")

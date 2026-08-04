@@ -13,7 +13,7 @@ struct AccountSetupView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
-            OnboardingHeader(title: "지금 가입하고,\n시작 전에 알려주세요.", onBack: onBack)
+            OnboardingHeader(title: "지금 가입하고,\n시작 전에 알려주세요.", progress: 0, onBack: onBack)
 
             MOEUMTextField(title: "이메일", placeholder: "이메일 입력", text: $email)
                 .keyboardType(.emailAddress)
