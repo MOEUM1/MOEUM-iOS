@@ -24,6 +24,10 @@ final class OnboardingFlow {
     var isSubmitting = false
     var errorMessage: String?
 
+    var characterTheme: CharacterTheme {
+        CharacterTheme(characterName: selectedCharacterName ?? "대훈")
+    }
+
     func move(to step: OnboardingStep) {
         path.append(step)
     }

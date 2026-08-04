@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct ProfileView: View {
+    let theme: CharacterTheme
     @State private var expandedCategory: ProfileCategory?
 
     var body: some View {
@@ -20,7 +21,7 @@ struct ProfileView: View {
 
     private var profileHeader: some View {
         HStack(spacing: 16) {
-            Image("MoeumMascot")
+            Image(theme.assetName)
                 .resizable()
                 .scaledToFit()
                 .frame(width: 74, height: 80)
@@ -35,7 +36,7 @@ struct ProfileView: View {
 
                 Text("LV.3")
                     .font(MOEUMTypography.buttonBold)
-                    .foregroundStyle(Color.moeumCharacterDarkYellow)
+                    .foregroundStyle(theme.accentColor)
             }
 
             Spacer()
@@ -194,5 +195,5 @@ private struct FlowLayout: Layout {
 }
 
 #Preview {
-    ProfileView()
+    ProfileView(theme: .yellow)
 }

@@ -8,12 +8,7 @@ struct CharacterConfirmationView: View {
     let onConfirm: () -> Void
 
     private var assetName: String {
-        switch characterName {
-        case "우린": "MoeumCharacterRed"
-        case "시우": "MoeumCharacterBlue"
-        case "유하": "MoeumCharacterPink"
-        default: "MoeumMascot"
-        }
+        CharacterTheme(characterName: characterName).assetName
     }
 
     var body: some View {
@@ -56,7 +51,12 @@ struct CharacterConfirmationView: View {
                     .frame(maxWidth: .infinity, alignment: .center)
             }
 
-            MOEUMButton(title: isLoading ? "가입 중..." : "다음", isEnabled: !isLoading, action: onConfirm)
+            MOEUMButton(
+                title: isLoading ? "가입 중..." : "다음",
+                isEnabled: !isLoading,
+                enabledColor: CharacterTheme(characterName: characterName).accentColor,
+                action: onConfirm
+            )
         }
         .padding(.horizontal, 20)
         .padding(.top, 12)

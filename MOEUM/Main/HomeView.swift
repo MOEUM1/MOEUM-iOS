@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct HomeView: View {
+    let theme: CharacterTheme
     private let weekdays = ["월", "화", "수", "목", "금", "토", "일"]
 
     var body: some View {
@@ -26,7 +27,7 @@ struct HomeView: View {
                 .frame(width: 60, height: 60)
 
             VStack(alignment: .leading, spacing: 9) {
-                (Text("연속 학습 ") + Text("2").foregroundColor(Color.moeumCharacterDarkYellow) + Text("일"))
+                (Text("연속 학습 ") + Text("2").foregroundColor(theme.accentColor) + Text("일"))
                     .font(MOEUMTypography.buttonSmallMedium)
 
                 HStack(spacing: 12) {
@@ -35,7 +36,7 @@ struct HomeView: View {
                             .font(MOEUMTypography.buttonSmallMedium)
                             .foregroundStyle(.white)
                             .frame(width: 26, height: 26)
-                            .background(index < 2 ? Color.moeumCharacterDarkYellow : Color.moeumGray50)
+                            .background(index < 2 ? theme.accentColor : Color.moeumGray50)
                             .clipShape(Circle())
                     }
                 }
@@ -58,7 +59,7 @@ struct HomeView: View {
 
             Spacer(minLength: 8)
 
-            Image("MoeumMascot")
+            Image(theme.assetName)
                 .resizable()
                 .scaledToFit()
                 .frame(width: 144, height: 156)
@@ -70,7 +71,7 @@ struct HomeView: View {
                 .foregroundStyle(.white)
                 .frame(maxWidth: .infinity)
                 .frame(height: 48)
-                .background(Color.moeumCharacterDarkYellow)
+                .background(theme.accentColor)
                 .clipShape(RoundedRectangle(cornerRadius: 14))
                 .padding(.horizontal, 24)
                 .padding(.bottom, 20)
@@ -83,7 +84,7 @@ struct HomeView: View {
     private func modeLabel(_ title: String, isSelected: Bool) -> some View {
         Text(title)
             .font(MOEUMTypography.bodyBold)
-            .foregroundStyle(isSelected ? Color.moeumCharacterDarkYellow : Color.moeumGray700)
+            .foregroundStyle(isSelected ? theme.accentColor : Color.moeumGray700)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .background(isSelected ? Color.white : Color.moeumGray50)
             .clipShape(RoundedRectangle(cornerRadius: 12))
@@ -99,7 +100,7 @@ struct HomeView: View {
                 Spacer()
                 Text("25exp")
                     .font(MOEUMTypography.h2Bold)
-                    .foregroundStyle(Color.moeumCharacterDarkYellow)
+                    .foregroundStyle(theme.accentColor)
                 Spacer()
                 levelMascot(label: "Lv. 2", scale: 62)
             }
@@ -107,7 +108,7 @@ struct HomeView: View {
             GeometryReader { proxy in
                 ZStack(alignment: .leading) {
                     Capsule().fill(Color.moeumGray100)
-                    Capsule().fill(Color.moeumCharacterDarkYellow)
+                    Capsule().fill(theme.accentColor)
                         .frame(width: proxy.size.width * 0.67)
                 }
             }
@@ -121,17 +122,17 @@ struct HomeView: View {
 
     private func levelMascot(label: String, scale: CGFloat) -> some View {
         VStack(spacing: 0) {
-            Image("MoeumMascot")
+            Image(theme.assetName)
                 .resizable()
                 .scaledToFit()
                 .frame(width: scale, height: 70)
             Text(label)
                 .font(MOEUMTypography.buttonSmallMedium)
-                .foregroundStyle(label == "Lv. 1" ? Color.moeumCharacterDarkYellow : Color.moeumGray500)
+                .foregroundStyle(label == "Lv. 1" ? theme.accentColor : Color.moeumGray500)
         }
     }
 }
 
 #Preview {
-    HomeView()
+    HomeView(theme: .yellow)
 }
