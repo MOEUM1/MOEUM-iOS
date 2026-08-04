@@ -10,6 +10,7 @@ struct ContentView: View {
 
     @State private var stage: RootStage = .splash
     @State private var flow = OnboardingFlow()
+    @State private var accessToken: String?
 
     var body: some View {
         Group {
@@ -29,9 +30,10 @@ struct ContentView: View {
 
     private var signUpFlow: some View {
         NavigationStack(path: $flow.path) {
-            WelcomeView {
-                flow.move(to: .account)
-            }
+            WelcomeView(
+                onSignUp: { flow.move(to: .account) },
+                onSignedIn: completeSignIn
+            )
             .navigationDestination(for: OnboardingStep.self) { step in
                 destination(for: step)
                     .navigationBarBackButtonHidden()
@@ -43,7 +45,10 @@ struct ContentView: View {
     private func destination(for step: OnboardingStep) -> some View {
         switch step {
         case .introduction, .welcome:
-            WelcomeView { flow.move(to: .account) }
+            WelcomeView(
+                onSignUp: { flow.move(to: .account) },
+                onSignedIn: completeSignIn
+            )
         case .studentStart:
             StudyCategorySelectionView(
                 onBack: flow.back,
@@ -83,6 +88,11 @@ struct ContentView: View {
                 stage = .main
             }
         }
+    }
+
+    private func completeSignIn(_ response: AuthResponse) {
+        accessToken = response.accessToken
+        stage = .main
     }
 }
 
