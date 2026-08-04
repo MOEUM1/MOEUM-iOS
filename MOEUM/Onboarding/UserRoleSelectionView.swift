@@ -23,7 +23,8 @@ struct UserRoleSelectionView: View {
                 UserRoleCard(
                     title: "성인으로 시작",
                     subtitle: "무슨말이든 적어야해",
-                    systemImage: "bubble.left.and.bubble.right.fill"
+                    systemImage: "bubble.left.and.bubble.right.fill",
+                    emoji: "❓"
                 ) {
                     onSelect(.adult)
                 }
