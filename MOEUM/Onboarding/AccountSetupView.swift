@@ -2,7 +2,7 @@ import SwiftUI
 
 struct AccountSetupView: View {
     let onBack: () -> Void
-    let onContinue: () -> Void
+    let onContinue: (String, String) -> Void
     @State private var email = ""
     @State private var password = ""
     @State private var passwordConfirmation = ""
@@ -29,7 +29,9 @@ struct AccountSetupView: View {
 
             ExistingAccountPrompt()
 
-            MOEUMButton(title: "다음", isEnabled: isValid, action: onContinue)
+            MOEUMButton(title: "다음", isEnabled: isValid) {
+                onContinue(email, password)
+            }
         }
         .padding(.horizontal, 20)
         .padding(.top, 10)
@@ -39,5 +41,5 @@ struct AccountSetupView: View {
 }
 
 #Preview {
-    AccountSetupView(onBack: {}, onContinue: {})
+    AccountSetupView(onBack: {}, onContinue: { _, _ in })
 }

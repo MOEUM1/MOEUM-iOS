@@ -57,13 +57,9 @@ struct ContentView: View {
                 flow.move(to: .character)
             }
         case .account:
-            AccountSetupView(onBack: flow.back) {
-                flow.move(to: .email)
-            }
+            AccountSetupView(onBack: flow.back, onContinue: flow.saveAccount)
         case .email:
-            ProfileNameView(onBack: flow.back) {
-                flow.move(to: .studentStart)
-            }
+            ProfileNameView(onBack: flow.back, onContinue: flow.saveNickname)
         case .character:
             CharacterSelectionView(
                 onBack: flow.back,
@@ -72,9 +68,15 @@ struct ContentView: View {
         case .characterConfirmation:
             CharacterConfirmationView(
                 characterName: flow.selectedCharacterName ?? "대훈",
+                isLoading: flow.isSubmitting,
+                errorMessage: flow.errorMessage,
                 onBack: flow.back
             ) {
-                flow.move(to: .completion)
+                Task {
+                    if await flow.register() {
+                        flow.move(to: .completion)
+                    }
+                }
             }
         case .completion:
             SignUpCompletionView {
