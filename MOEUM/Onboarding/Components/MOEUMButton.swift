@@ -3,6 +3,7 @@ import SwiftUI
 struct MOEUMButton: View {
     let title: String
     var isEnabled = true
+    var enabledColor = Color.moeumMain500
     let action: () -> Void
 
     var body: some View {
@@ -12,7 +13,7 @@ struct MOEUMButton: View {
                 .foregroundStyle(.white)
                 .frame(maxWidth: .infinity)
                 .frame(height: 48)
-                .background(isEnabled ? Color.moeumMain500 : Color.moeumGray200)
+                .background(isEnabled ? enabledColor : Color.moeumGray200)
                 .clipShape(RoundedRectangle(cornerRadius: 6))
         }
         .disabled(!isEnabled)
