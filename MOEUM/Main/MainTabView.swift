@@ -12,7 +12,7 @@ struct MainTabView: View {
                 case .statistics:
                     LearningStatisticsView()
                 case .league:
-                    MainPlaceholder(title: "리그")
+                    LeagueView()
                 case .profile:
                     MainPlaceholder(title: "마이")
                 }
