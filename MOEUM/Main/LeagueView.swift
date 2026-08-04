@@ -38,6 +38,7 @@ struct LeagueView: View {
         .scrollIndicators(.hidden)
         .background(Color.moeumAppBackground)
         .task { await loadLeague() }
+        .onAppear { Task { await loadLeague() } }
     }
 
     private var header: some View {

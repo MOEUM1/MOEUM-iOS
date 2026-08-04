@@ -30,6 +30,12 @@ struct HomeView: View {
         .fullScreenCover(isPresented: $isCardPresented) { CardGameView(theme: theme, accessToken: accessToken) }
         .fullScreenCover(isPresented: $isExamPresented) { WrittenExamView(theme: theme, accessToken: accessToken) }
         .task { await loadDashboard() }
+        .onChange(of: isCardPresented) { _, isPresented in
+            if !isPresented { Task { await loadDashboard() } }
+        }
+        .onChange(of: isExamPresented) { _, isPresented in
+            if !isPresented { Task { await loadDashboard() } }
+        }
     }
 
     private var streakCard: some View {
