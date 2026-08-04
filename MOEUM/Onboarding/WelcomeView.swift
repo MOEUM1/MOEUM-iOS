@@ -19,12 +19,14 @@ struct WelcomeView: View {
 
             HStack(spacing: 4) {
                 Spacer()
-                Text("아직 계정이 없으신가요?")
+                Text("만약 계정이 없으신가요?")
                     .foregroundStyle(Color.moeumGray500)
                 Button("회원가입", action: onSignUp)
                     .foregroundStyle(Color.moeumMain500)
+                Spacer()
             }
-            .font(MOEUMTypography.buttonSmallMedium)
+            .font(MOEUMTypography.buttonMedium)
+            .frame(maxWidth: .infinity)
 
             MOEUMButton(title: "로그인", isEnabled: !email.isEmpty && !password.isEmpty) {}
         }
