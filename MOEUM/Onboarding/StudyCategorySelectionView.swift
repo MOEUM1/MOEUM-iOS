@@ -22,7 +22,22 @@ struct StudyCategorySelectionView: View {
                 .font(MOEUMTypography.h2Bold)
                 .foregroundStyle(Color.moeumGray900)
 
-            Spacer()
+            ScrollView {
+                LazyVStack(spacing: 14) {
+                    ForEach(StudyCategory.onboarding) { category in
+                        StudyCategoryRow(
+                            category: category,
+                            isExpanded: expandedCategory == category.id,
+                            selectedTopic: $selectedTopic
+                        ) {
+                            withAnimation {
+                                expandedCategory = expandedCategory == category.id ? nil : category.id
+                            }
+                        }
+                    }
+                }
+            }
+            .scrollIndicators(.hidden)
         }
         .padding(.horizontal, 20)
         .padding(.top, 12)
