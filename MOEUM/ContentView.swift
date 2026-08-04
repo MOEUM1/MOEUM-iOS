@@ -17,7 +17,9 @@ struct ContentView: View {
         Group {
             switch stage {
             case .splash:
-                SplashView { stage = .introduction }
+                SplashView {
+                    Task { await restoreSession() }
+                }
             case .introduction:
                 IntroductionView { stage = .welcome }
             case .welcome:
@@ -86,6 +88,10 @@ struct ContentView: View {
             }
         case .completion:
             SignUpCompletionView(theme: flow.characterTheme) {
+                if let token = flow.accessToken {
+                    accessToken = token
+                    try? AuthTokenStore.shared.save(token)
+                }
                 characterTheme = flow.characterTheme
                 stage = .main
             }
@@ -94,11 +100,31 @@ struct ContentView: View {
 
     private func completeSignIn(_ response: AuthResponse) {
         accessToken = response.accessToken
+        try? AuthTokenStore.shared.save(response.accessToken)
         Task {
             if let character = try? await APIClient.shared.myCharacter(accessToken: response.accessToken) {
                 characterTheme = CharacterTheme(characterName: character.character.name)
             }
             stage = .main
+        }
+    }
+
+    @MainActor
+    private func restoreSession() async {
+        guard let token = try? AuthTokenStore.shared.load() else {
+            stage = .introduction
+            return
+        }
+
+        do {
+            let response = try await APIClient.shared.myCharacter(accessToken: token)
+            accessToken = token
+            characterTheme = CharacterTheme(characterName: response.character.name)
+            stage = .main
+        } catch {
+            try? AuthTokenStore.shared.delete()
+            accessToken = nil
+            stage = .introduction
         }
     }
 }
