@@ -8,7 +8,7 @@ struct MainTabView: View {
             Group {
                 switch selection {
                 case .home:
-                    MainPlaceholder(title: "홈")
+                    HomeView()
                 case .statistics:
                     MainPlaceholder(title: "학습 통계")
                 case .league:
@@ -42,7 +42,7 @@ struct MainTabView: View {
             .frame(height: 91)
             .background(Color.white)
         }
-        .background(Color.moeumGray100)
+        .background(Color.moeumAppBackground)
     }
 }
 
