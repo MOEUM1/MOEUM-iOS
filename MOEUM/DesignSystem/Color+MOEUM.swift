@@ -1,6 +1,7 @@
 import SwiftUI
 
 extension Color {
+    static let moeumAppBackground = Color("AppBackground")
     static let moeumGray50 = Color("Gray50")
     static let moeumGray100 = Color("Gray100")
     static let moeumGray200 = Color("Gray200")
