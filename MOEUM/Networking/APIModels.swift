@@ -1,0 +1,83 @@
+import Foundation
+
+struct SignUpRequest: Encodable {
+    let nickname: String
+    let email: String
+    let password: String
+    let category: String
+    let choosed: String
+}
+
+struct SignInRequest: Encodable {
+    let email: String
+    let password: String
+}
+
+struct AuthResponse: Decodable {
+    let user: APIUser
+    let character: AuthCharacter
+    let accessToken: String
+}
+
+struct APIUser: Decodable {
+    let id: String
+    let email: String
+    let nickname: String
+    let createdAt: Date
+}
+
+struct AuthCharacter: Decodable {
+    let id: String
+    let level: Int
+    let exp: Int
+}
+
+struct CharacterResponse: Decodable {
+    let character: CharacterDetail
+}
+
+struct CharacterDetail: Decodable {
+    let id: String
+    let name: String
+    let description: String
+    let level: Int
+    let exp: Int
+    let totalExp: Int
+    let expToNextLevel: Int
+    let createdAt: Date
+}
+
+struct LeagueResponse: Decodable {
+    let totalUsers: Int
+    let rankings: [LeagueRanking]
+}
+
+struct LeagueRanking: Decodable, Identifiable {
+    let rank: Int
+    let userId: String
+    let nickname: String
+    let characterName: String
+    let level: Int
+    let exp: Int
+    let totalExp: Int
+
+    var id: String { userId }
+}
+
+extension APIClient {
+    func signUp(_ request: SignUpRequest) async throws -> AuthResponse {
+        try await send("auth/signup", method: .post, body: request)
+    }
+
+    func signIn(_ request: SignInRequest) async throws -> AuthResponse {
+        try await send("auth/signin", method: .post, body: request)
+    }
+
+    func myCharacter(accessToken: String) async throws -> CharacterResponse {
+        try await send("characters/me", accessToken: accessToken)
+    }
+
+    func league(accessToken: String, limit: Int = 10) async throws -> LeagueResponse {
+        try await send("leagues/top?limit=\(limit)", accessToken: accessToken)
+    }
+}
