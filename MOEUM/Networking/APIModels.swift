@@ -122,12 +122,36 @@ struct CardResultResponse: Decodable {
     let correctCount: Int
     let wrongCount: Int
     let totalCount: Int
+    let levelUp: LevelUpResult
 }
 
 struct QuizAnswer: Encodable { let index: Int; let answer: String }
 struct QuizResultRequest: Encodable { let historyId: String; let input: [QuizAnswer]; let endAt: Date }
 struct QuizGrade: Decodable { let index: Int; let answer: String; let isCorrect: Bool; let correctAnswer: String; let explaination: String }
-struct QuizResultResponse: Decodable { let historyId: String; let correctCount: Int; let wrongCount: Int; let grade: [QuizGrade]; let endTime: Date }
+struct QuizResultResponse: Decodable { let historyId: String; let correctCount: Int; let wrongCount: Int; let totalCount: Int; let grade: [QuizGrade]; let endTime: Date; let levelUp: LevelUpResult }
+
+struct LevelUpResult: Decodable {
+    let gainedExp: Int
+    let leveledUp: Bool
+    let before: LevelSnapshot
+    let after: LevelSnapshot
+    let expToNextLevel: Int
+}
+
+struct LevelSnapshot: Decodable { let level: Int; let exp: Int; let totalExp: Int }
+
+struct ChatEndResponse: Decodable {
+    let historyId: String
+    let summary: String
+    let turns: Int
+    let messages: [ChatStoredMessage]
+    let levelUp: LevelUpResult
+}
+
+struct ChatStoredMessage: Decodable {
+    let role: String
+    let content: String
+}
 
 extension APIClient {
     func signUp(_ request: SignUpRequest) async throws -> AuthResponse {
@@ -173,6 +197,10 @@ extension APIClient {
             body: ChatAnswerRequest(answer: answer),
             accessToken: accessToken
         )
+    }
+
+    func endChat(historyId: String, answer: String, accessToken: String) async throws -> ChatEndResponse {
+        try await send("games/chat/\(historyId)/end", method: .post, body: ChatAnswerRequest(answer: answer), accessToken: accessToken)
     }
 
     func startCardGame(accessToken: String) async throws -> GameStartResponse {
