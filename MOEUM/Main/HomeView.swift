@@ -2,6 +2,7 @@ import SwiftUI
 
 struct HomeView: View {
     let theme: CharacterTheme
+    @State private var selectedMode: LearningMode = .teaching
     private let weekdays = ["월", "화", "수", "목", "금", "토", "일"]
 
     var body: some View {
@@ -51,9 +52,9 @@ struct HomeView: View {
     private var learningCard: some View {
         VStack(spacing: 0) {
             HStack(spacing: 0) {
-                modeLabel("Teaching", isSelected: true)
-                modeLabel("Card", isSelected: false)
-                modeLabel("Test", isSelected: false)
+                ForEach(LearningMode.allCases) { mode in
+                    modeButton(mode)
+                }
             }
             .frame(height: 66)
 
@@ -63,10 +64,11 @@ struct HomeView: View {
                 .resizable()
                 .scaledToFit()
                 .frame(width: 144, height: 156)
+                .id(theme)
 
             Spacer(minLength: 8)
 
-            Button("대훈이와 대화하러 가기") {}
+            Button(selectedMode.actionTitle(characterName: theme.rawValue)) {}
                 .font(MOEUMTypography.buttonBold)
                 .foregroundStyle(.white)
                 .frame(maxWidth: .infinity)
@@ -81,13 +83,20 @@ struct HomeView: View {
         .clipShape(RoundedRectangle(cornerRadius: 12))
     }
 
-    private func modeLabel(_ title: String, isSelected: Bool) -> some View {
-        Text(title)
-            .font(MOEUMTypography.bodyBold)
-            .foregroundStyle(isSelected ? theme.accentColor : Color.moeumGray700)
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .background(isSelected ? Color.white : Color.moeumGray50)
-            .clipShape(RoundedRectangle(cornerRadius: 12))
+    private func modeButton(_ mode: LearningMode) -> some View {
+        Button {
+            withAnimation(.easeInOut(duration: 0.2)) {
+                selectedMode = mode
+            }
+        } label: {
+            Text(mode.title)
+                .font(MOEUMTypography.bodyBold)
+                .foregroundStyle(selectedMode == mode ? theme.accentColor : Color.moeumGray700)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .background(selectedMode == mode ? Color.white : Color.moeumGray50)
+                .clipShape(RoundedRectangle(cornerRadius: 12))
+        }
+        .buttonStyle(.plain)
     }
 
     private var levelCard: some View {
@@ -129,6 +138,30 @@ struct HomeView: View {
             Text(label)
                 .font(MOEUMTypography.buttonSmallMedium)
                 .foregroundStyle(label == "Lv. 1" ? theme.accentColor : Color.moeumGray500)
+        }
+    }
+}
+
+private enum LearningMode: String, CaseIterable, Identifiable {
+    case teaching
+    case card
+    case test
+
+    var id: Self { self }
+
+    var title: String {
+        switch self {
+        case .teaching: "Teaching"
+        case .card: "Card"
+        case .test: "Test"
+        }
+    }
+
+    func actionTitle(characterName: String) -> String {
+        switch self {
+        case .teaching: "\(characterName)이와 대화"
+        case .card: "플래시 카드"
+        case .test: "주관식 문제"
         }
     }
 }
