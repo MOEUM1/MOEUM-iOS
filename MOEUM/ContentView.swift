@@ -11,6 +11,7 @@ struct ContentView: View {
     @State private var stage: RootStage = .splash
     @State private var flow = OnboardingFlow()
     @State private var accessToken: String?
+    @State private var characterTheme: CharacterTheme = .yellow
 
     var body: some View {
         Group {
@@ -22,7 +23,7 @@ struct ContentView: View {
             case .welcome:
                 signUpFlow
             case .main:
-                MainTabView()
+                MainTabView(theme: characterTheme)
             }
         }
         .animation(.easeInOut(duration: 0.22), value: stage)
@@ -84,7 +85,8 @@ struct ContentView: View {
                 }
             }
         case .completion:
-            SignUpCompletionView {
+            SignUpCompletionView(theme: flow.characterTheme) {
+                characterTheme = flow.characterTheme
                 stage = .main
             }
         }
@@ -92,7 +94,12 @@ struct ContentView: View {
 
     private func completeSignIn(_ response: AuthResponse) {
         accessToken = response.accessToken
-        stage = .main
+        Task {
+            if let character = try? await APIClient.shared.myCharacter(accessToken: response.accessToken) {
+                characterTheme = CharacterTheme(characterName: character.character.name)
+            }
+            stage = .main
+        }
     }
 }
 

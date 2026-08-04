@@ -1,13 +1,14 @@
 import SwiftUI
 
 struct SignUpCompletionView: View {
+    let theme: CharacterTheme
     let onComplete: () -> Void
 
     var body: some View {
         VStack(spacing: 0) {
             Spacer(minLength: 138)
 
-            Image("MoeumMascot")
+            Image(theme.assetName)
                 .resizable()
                 .scaledToFit()
                 .frame(width: 298, height: 321)
@@ -22,7 +23,7 @@ struct SignUpCompletionView: View {
 
             MOEUMButton(
                 title: "완료",
-                enabledColor: Color.moeumCharacterDarkYellow,
+                enabledColor: theme.accentColor,
                 action: onComplete
             )
             .padding(.bottom, 18)
@@ -33,5 +34,5 @@ struct SignUpCompletionView: View {
 }
 
 #Preview {
-    SignUpCompletionView(onComplete: {})
+    SignUpCompletionView(theme: .yellow, onComplete: {})
 }

@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct MainTabView: View {
+    let theme: CharacterTheme
     @State private var selection: MainTab = .home
 
     var body: some View {
@@ -8,13 +9,13 @@ struct MainTabView: View {
             Group {
                 switch selection {
                 case .home:
-                    HomeView()
+                    HomeView(theme: theme)
                 case .statistics:
                     LearningStatisticsView()
                 case .league:
-                    LeagueView()
+                    LeagueView(theme: theme)
                 case .profile:
-                    ProfileView()
+                    ProfileView(theme: theme)
                 }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -33,7 +34,7 @@ struct MainTabView: View {
                             Text(tab.title)
                                 .font(MOEUMTypography.captionMedium)
                         }
-                        .foregroundStyle(selection == tab ? Color.moeumCharacterDarkYellow : Color.moeumGray500)
+                        .foregroundStyle(selection == tab ? theme.accentColor : Color.moeumGray500)
                         .frame(maxWidth: .infinity)
                     }
                     .buttonStyle(.plain)
@@ -74,5 +75,5 @@ private enum MainTab: String, CaseIterable, Identifiable {
 }
 
 #Preview {
-    MainTabView()
+    MainTabView(theme: .yellow)
 }

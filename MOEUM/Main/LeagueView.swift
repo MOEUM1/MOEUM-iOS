@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct LeagueView: View {
+    let theme: CharacterTheme
     private let members = [
         LeagueMember(rank: 1, name: "당신", experience: "850 exp", isCurrentUser: true),
         LeagueMember(rank: 2, name: "민수", experience: "790 exp"),
@@ -47,7 +48,7 @@ struct LeagueView: View {
 
             Spacer(minLength: 0)
 
-            Image("MoeumMascot")
+            Image(theme.assetName)
                 .resizable()
                 .scaledToFit()
                 .frame(width: 126, height: 140)
@@ -60,10 +61,10 @@ struct LeagueView: View {
         HStack(spacing: 14) {
             Text("\(member.rank)위")
                 .font(MOEUMTypography.bodyBold)
-                .foregroundStyle(member.isCurrentUser ? Color.moeumCharacterDarkYellow : Color.moeumGray700)
+                .foregroundStyle(member.isCurrentUser ? theme.accentColor : Color.moeumGray700)
                 .frame(width: 38, alignment: .leading)
 
-            Image("MoeumMascot")
+            Image(theme.assetName)
                 .resizable()
                 .scaledToFit()
                 .frame(width: 42, height: 45)
@@ -83,7 +84,7 @@ struct LeagueView: View {
         .background(Color.white)
         .overlay {
             RoundedRectangle(cornerRadius: 12)
-                .stroke(member.isCurrentUser ? Color.moeumCharacterDarkYellow : Color.moeumGray100,
+                .stroke(member.isCurrentUser ? theme.accentColor : Color.moeumGray100,
                         lineWidth: member.isCurrentUser ? 3 : 1)
         }
         .clipShape(RoundedRectangle(cornerRadius: 12))
@@ -100,5 +101,5 @@ private struct LeagueMember: Identifiable {
 }
 
 #Preview {
-    LeagueView()
+    LeagueView(theme: .yellow)
 }
