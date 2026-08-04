@@ -25,7 +25,7 @@ struct ContentView: View {
             case .welcome:
                 signUpFlow
             case .main:
-                MainTabView(theme: characterTheme)
+                MainTabView(theme: characterTheme, accessToken: accessToken ?? "")
             }
         }
         .animation(.easeInOut(duration: 0.22), value: stage)
