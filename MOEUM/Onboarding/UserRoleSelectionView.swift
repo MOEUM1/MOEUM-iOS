@@ -14,6 +14,14 @@ struct UserRoleSelectionView: View {
             ) {
                 onSelect(.student)
             }
+
+            UserRoleCard(
+                title: "성인으로 시작",
+                subtitle: "무슨말이든 적어야해",
+                systemImage: "bubble.left.and.bubble.right.fill"
+            ) {
+                onSelect(.adult)
+            }
         }
         .padding(.horizontal, 24)
         .background(Color.white)
