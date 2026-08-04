@@ -31,9 +31,8 @@ struct UserRoleSelectionView: View {
             }
 
             Text("나중에 변경 가능합니다.")
-                .font(MOEUMTypography.bodyMedium)
+                .font(MOEUMTypography.buttonSmallMedium)
                 .foregroundStyle(Color.moeumGray300)
-                .padding(.top, 4)
 
         }
         .padding(.horizontal, 24)
