@@ -70,6 +70,15 @@ struct LeagueRanking: Decodable, Identifiable {
     var id: String { userId }
 }
 
+struct MyLeagueRankResponse: Decodable {
+    let totalUsers: Int
+    let rank: Int
+    let characterName: String
+    let level: Int
+    let exp: Int
+    let totalExp: Int
+}
+
 struct ChatStartResponse: Decodable {
     let historyId: String
     let subject: String
@@ -105,6 +114,10 @@ extension APIClient {
 
     func league(accessToken: String, limit: Int = 10) async throws -> LeagueResponse {
         try await send("leagues/top?limit=\(limit)", accessToken: accessToken)
+    }
+
+    func myLeagueRank(accessToken: String) async throws -> MyLeagueRankResponse {
+        try await send("leagues/me", accessToken: accessToken)
     }
 
     func startChat(accessToken: String) async throws -> ChatStartResponse {
