@@ -26,6 +26,9 @@ struct APIUser: Decodable {
     let createdAt: Date
 }
 
+struct MyUserResponse: Decodable { let user: APIUser }
+struct CategoriesResponse: Decodable { let category: [String] }
+
 struct AuthCharacter: Decodable {
     let id: String
     let level: Int
@@ -110,6 +113,14 @@ extension APIClient {
 
     func myStreak(accessToken: String) async throws -> StreakResponse {
         try await send("users/me/streak", accessToken: accessToken)
+    }
+
+    func myUser(accessToken: String) async throws -> MyUserResponse {
+        try await send("users/me", accessToken: accessToken)
+    }
+
+    func myCategories(accessToken: String) async throws -> CategoriesResponse {
+        try await send("users/me/categories", accessToken: accessToken)
     }
 
     func league(accessToken: String, limit: Int = 10) async throws -> LeagueResponse {
