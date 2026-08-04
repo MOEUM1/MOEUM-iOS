@@ -22,6 +22,12 @@ let project = Project(
                 with: [
                     "UILaunchScreen": [:],
                     "UIApplicationSupportsIndirectInputEvents": true,
+                    "UIAppFonts": [
+                        "Pretendard-Bold.otf",
+                        "Pretendard-Medium.otf",
+                        "Pretendard-SemiBold.otf",
+                        "OwnglyphEuiyeonChae.ttf",
+                    ],
                     "UISupportedInterfaceOrientations": [
                         "UIInterfaceOrientationPortrait",
                         "UIInterfaceOrientationLandscapeLeft",
@@ -36,7 +42,11 @@ let project = Project(
                 ]
             ),
             sources: ["MOEUM/**/*.swift"],
-            resources: ["MOEUM/Assets.xcassets"],
+            resources: [
+                "MOEUM/Assets.xcassets",
+                "MOEUM/Resources/Fonts/*.otf",
+                "MOEUM/Resources/Fonts/*.ttf",
+            ],
             settings: .settings(
                 base: [
                     "ASSETCATALOG_COMPILER_APPICON_NAME": "AppIcon",
