@@ -14,7 +14,7 @@ struct MainTabView: View {
                 case .statistics:
                     LearningStatisticsView()
                 case .league:
-                    LeagueView(theme: theme)
+                    LeagueView(theme: theme, accessToken: accessToken)
                 case .profile:
                     ProfileView(theme: theme)
                 }
