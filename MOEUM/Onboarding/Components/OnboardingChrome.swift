@@ -10,15 +10,28 @@ struct MOEUMWordmark: View {
 
 struct OnboardingHeader: View {
     let title: String
+    var progress: Int?
     let onBack: () -> Void
+
+    init(title: String, progress: Int? = nil, onBack: @escaping () -> Void) {
+        self.title = title
+        self.progress = progress
+        self.onBack = onBack
+    }
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Button(action: onBack) {
-                Image(systemName: "chevron.left")
-                    .font(.system(size: 17, weight: .semibold))
-                    .foregroundStyle(Color.moeumGray900)
-                    .frame(width: 24, height: 24)
+            HStack(spacing: 10) {
+                Button(action: onBack) {
+                    Image(systemName: "chevron.left")
+                        .font(.system(size: 17, weight: .semibold))
+                        .foregroundStyle(Color.moeumGray900)
+                        .frame(width: 24, height: 24)
+                }
+
+                if let progress {
+                    PageDots(selection: progress, count: 6)
+                }
             }
 
             Text(title)

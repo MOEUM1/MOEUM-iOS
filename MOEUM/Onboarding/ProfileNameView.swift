@@ -7,7 +7,7 @@ struct ProfileNameView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 18) {
-            OnboardingHeader(title: "시작하기 전\n이름을 알려주세요!", onBack: onBack)
+            OnboardingHeader(title: "시작하기 전\n이름을 알려주세요!", progress: 1, onBack: onBack)
 
             MOEUMTextField(title: "닉네임", placeholder: "닉네임 입력", text: $name)
 
