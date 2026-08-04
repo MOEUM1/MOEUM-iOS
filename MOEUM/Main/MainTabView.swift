@@ -3,6 +3,7 @@ import SwiftUI
 struct MainTabView: View {
     let theme: CharacterTheme
     let accessToken: String
+    let onLogout: () -> Void
     @State private var selection: MainTab = .home
 
     var body: some View {
@@ -16,7 +17,7 @@ struct MainTabView: View {
                 case .league:
                     LeagueView(theme: theme, accessToken: accessToken)
                 case .profile:
-                    ProfileView(theme: theme)
+                    ProfileView(theme: theme, accessToken: accessToken, onLogout: onLogout)
                 }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -76,5 +77,5 @@ private enum MainTab: String, CaseIterable, Identifiable {
 }
 
 #Preview {
-    MainTabView(theme: .yellow, accessToken: "preview")
+    MainTabView(theme: .yellow, accessToken: "preview", onLogout: {})
 }

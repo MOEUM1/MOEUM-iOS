@@ -25,7 +25,7 @@ struct ContentView: View {
             case .welcome:
                 signUpFlow
             case .main:
-                MainTabView(theme: characterTheme, accessToken: accessToken ?? "")
+                MainTabView(theme: characterTheme, accessToken: accessToken ?? "", onLogout: logout)
             }
         }
         .animation(.easeInOut(duration: 0.22), value: stage)
@@ -126,6 +126,13 @@ struct ContentView: View {
             accessToken = nil
             stage = .introduction
         }
+    }
+
+    private func logout() {
+        try? AuthTokenStore.shared.delete()
+        accessToken = nil
+        flow = OnboardingFlow()
+        stage = .welcome
     }
 }
 
