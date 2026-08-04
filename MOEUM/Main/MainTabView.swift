@@ -10,7 +10,7 @@ struct MainTabView: View {
                 case .home:
                     HomeView()
                 case .statistics:
-                    MainPlaceholder(title: "학습 통계")
+                    LearningStatisticsView()
                 case .league:
                     MainPlaceholder(title: "리그")
                 case .profile:
