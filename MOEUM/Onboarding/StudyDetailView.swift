@@ -47,15 +47,7 @@ struct StudyDetailView: View {
             .background(Color.moeumGray50)
             .overlay { RoundedRectangle(cornerRadius: 4).stroke(Color.moeumGray200) }
 
-            HStack(spacing: 4) {
-                Spacer()
-                Text("만약 계정이 있으신가요?")
-                    .foregroundStyle(Color.moeumGray400)
-                Text("로그인")
-                    .foregroundStyle(Color.moeumMain500)
-                    .underline()
-            }
-            .font(MOEUMTypography.buttonSmallMedium)
+            ExistingAccountPrompt()
 
             MOEUMButton(title: "완료", isEnabled: !detail.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty) {
                 onComplete(detail)

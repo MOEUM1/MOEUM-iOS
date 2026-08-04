@@ -27,6 +27,8 @@ struct AccountSetupView: View {
 
             Spacer()
 
+            ExistingAccountPrompt()
+
             MOEUMButton(title: "다음", isEnabled: isValid, action: onContinue)
         }
         .padding(.horizontal, 20)
