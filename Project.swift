@@ -21,6 +21,9 @@ let project = Project(
             infoPlist: .extendingDefault(
                 with: [
                     "UILaunchScreen": [:],
+                    "NSAppTransportSecurity": [
+                        "NSAllowsArbitraryLoads": true,
+                    ],
                     "UIApplicationSupportsIndirectInputEvents": true,
                     "UIAppFonts": [
                         "Pretendard-Bold.otf",
