@@ -14,7 +14,7 @@ struct MainTabView: View {
                 case .league:
                     LeagueView()
                 case .profile:
-                    MainPlaceholder(title: "마이")
+                    ProfileView()
                 }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
@@ -70,16 +70,6 @@ private enum MainTab: String, CaseIterable, Identifiable {
         case .league: "MainTabLeague"
         case .profile: "MainTabProfile"
         }
-    }
-}
-
-private struct MainPlaceholder: View {
-    let title: String
-
-    var body: some View {
-        Text(title)
-            .font(MOEUMTypography.h2Bold)
-            .foregroundStyle(Color.moeumGray900)
     }
 }
 
