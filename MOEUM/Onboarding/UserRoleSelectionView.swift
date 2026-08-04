@@ -14,7 +14,8 @@ struct UserRoleSelectionView: View {
                 UserRoleCard(
                     title: "학생으로 시작",
                     subtitle: "뭐 적지",
-                    systemImage: "books.vertical.fill"
+                    systemImage: "books.vertical.fill",
+                    emoji: "📚"
                 ) {
                     onSelect(.student)
                 }
