@@ -64,6 +64,22 @@ struct LeagueRanking: Decodable, Identifiable {
     var id: String { userId }
 }
 
+struct ChatStartResponse: Decodable {
+    let historyId: String
+    let subject: String
+    let question: String
+    let createdAt: Date
+}
+
+struct ChatAnswerRequest: Encodable {
+    let answer: String
+}
+
+struct ChatAnswerResponse: Decodable {
+    let historyId: String
+    let question: String
+}
+
 extension APIClient {
     func signUp(_ request: SignUpRequest) async throws -> AuthResponse {
         try await send("auth/signup", method: .post, body: request)
@@ -79,5 +95,18 @@ extension APIClient {
 
     func league(accessToken: String, limit: Int = 10) async throws -> LeagueResponse {
         try await send("leagues/top?limit=\(limit)", accessToken: accessToken)
+    }
+
+    func startChat(accessToken: String) async throws -> ChatStartResponse {
+        try await send("games/chat", method: .post, accessToken: accessToken)
+    }
+
+    func answerChat(historyId: String, answer: String, accessToken: String) async throws -> ChatAnswerResponse {
+        try await send(
+            "games/chat/\(historyId)/answer",
+            method: .post,
+            body: ChatAnswerRequest(answer: answer),
+            accessToken: accessToken
+        )
     }
 }
