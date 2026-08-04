@@ -9,7 +9,7 @@ struct UserRoleCard: View {
     var body: some View {
         Button(action: action) {
             HStack(spacing: 16) {
-                VStack(alignment: .leading, spacing: 8) {
+                VStack(alignment: .leading, spacing: 4) {
                     HStack(spacing: 8) {
                         Text(title)
                             .font(MOEUMTypography.buttonBold)
@@ -17,7 +17,7 @@ struct UserRoleCard: View {
                             .font(.system(size: 14, weight: .semibold))
                     }
                     Text(subtitle)
-                        .font(MOEUMTypography.bodyMedium)
+                        .font(MOEUMTypography.captionMedium)
                         .foregroundStyle(Color.moeumGray600)
                 }
 
