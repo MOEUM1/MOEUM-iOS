@@ -2,7 +2,12 @@ import SwiftUI
 
 struct ProfileView: View {
     let theme: CharacterTheme
+    let accessToken: String
+    let onLogout: () -> Void
     @State private var expandedCategory: ProfileCategory?
+    @State private var user: APIUser?
+    @State private var character: CharacterDetail?
+    @State private var categories: [String] = []
 
     var body: some View {
         ScrollView {
@@ -17,6 +22,7 @@ struct ProfileView: View {
         }
         .scrollIndicators(.hidden)
         .background(Color.moeumAppBackground)
+        .task { await loadProfile() }
     }
 
     private var profileHeader: some View {
@@ -30,11 +36,11 @@ struct ProfileView: View {
                 .clipShape(Circle())
 
             VStack(alignment: .leading, spacing: 7) {
-                Text("사용자")
+                Text(user?.nickname ?? "사용자")
                     .font(MOEUMTypography.h2Bold)
                     .foregroundStyle(Color.moeumGray900)
 
-                Text("LV.3")
+                Text("LV.\(character?.level ?? 1)")
                     .font(MOEUMTypography.buttonBold)
                     .foregroundStyle(theme.accentColor)
             }
@@ -57,6 +63,18 @@ struct ProfileView: View {
                 .foregroundStyle(Color.moeumGray900)
 
             VStack(spacing: 10) {
+                if !categories.isEmpty {
+                    FlowLayout(spacing: 8) {
+                        ForEach(categories, id: \.self) { category in
+                            Text(category)
+                                .font(MOEUMTypography.buttonSmallMedium)
+                                .padding(.horizontal, 12)
+                                .frame(height: 32)
+                                .background(theme.accentColor.opacity(0.15))
+                                .clipShape(Capsule())
+                        }
+                    }
+                }
                 ForEach(ProfileCategory.allCases) { category in
                     categoryRow(category)
                 }
@@ -115,7 +133,8 @@ struct ProfileView: View {
                 myRow("내 학습 기록")
                 myRow("공지사항")
                 myRow("문의하기")
-                myRow("로그아웃")
+                Button(action: onLogout) { myRow("로그아웃") }
+                    .buttonStyle(.plain)
             }
             .clipShape(RoundedRectangle(cornerRadius: 12))
         }
@@ -134,6 +153,16 @@ struct ProfileView: View {
         .padding(.horizontal, 16)
         .frame(height: 56)
         .background(Color.white)
+    }
+
+    @MainActor
+    private func loadProfile() async {
+        async let userRequest = APIClient.shared.myUser(accessToken: accessToken)
+        async let characterRequest = APIClient.shared.myCharacter(accessToken: accessToken)
+        async let categoriesRequest = APIClient.shared.myCategories(accessToken: accessToken)
+        user = (try? await userRequest)?.user
+        character = (try? await characterRequest)?.character
+        categories = (try? await categoriesRequest)?.category ?? []
     }
 }
 
@@ -195,5 +224,5 @@ private struct FlowLayout: Layout {
 }
 
 #Preview {
-    ProfileView(theme: .yellow)
+    ProfileView(theme: .yellow, accessToken: "preview", onLogout: {})
 }
