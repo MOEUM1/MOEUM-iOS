@@ -60,7 +60,11 @@ struct CharacterSelectionView: View {
             }
             .font(MOEUMTypography.buttonSmallMedium)
 
-            MOEUMButton(title: "다음", isEnabled: selection != nil) {
+            MOEUMButton(
+                title: "다음",
+                isEnabled: selection != nil,
+                enabledColor: selection?.buttonColor ?? .moeumMain500
+            ) {
                 if let selection {
                     onContinue(selection.name)
                 }
@@ -81,4 +85,13 @@ private struct CharacterOption: Identifiable, Equatable {
     let name: String
     let assetName: String
     var id: String { name }
+
+    var buttonColor: Color {
+        switch name {
+        case "우린": .moeumCharacterLightRed
+        case "시우": .moeumCharacterLightBlue
+        case "유하": .moeumCharacterLightPink
+        default: .moeumCharacterLightYellow
+        }
+    }
 }
