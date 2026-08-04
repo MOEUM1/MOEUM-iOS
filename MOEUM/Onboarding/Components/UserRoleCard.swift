@@ -32,8 +32,8 @@ struct UserRoleCard: View {
                             .foregroundStyle(Color.moeumMain500)
                     }
                 }
-                    .font(.system(size: 34))
-                    .frame(width: 72, height: 72)
+                    .font(.system(size: 28))
+                    .frame(width: 52, height: 52)
                     .background(Color.white)
                     .clipShape(Circle())
             }
