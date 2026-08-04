@@ -61,10 +61,6 @@ struct ContentView: View {
             ) { _ in
                 flow.move(to: .character)
             }
-        case .adultStart:
-            AdultStartView(onBack: flow.back) {
-                flow.move(to: .account)
-            }
         case .account:
             AccountSetupView(onBack: flow.back) {
                 flow.move(to: .email)
@@ -88,14 +84,6 @@ struct ContentView: View {
         case .completion:
             SignUpCompletionView(role: flow.selectedRole ?? .student) {
                 stage = .main
-            }
-        case .terms:
-            TermsSelectionView(onBack: flow.back) {
-                flow.move(to: .story)
-            }
-        case .story:
-            StoryView(onBack: flow.back) {
-                flow.path.removeAll()
             }
         }
     }

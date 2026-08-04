@@ -6,14 +6,11 @@ enum OnboardingStep: Hashable {
     case roleSelection
     case studentStart
     case studyDetail
-    case adultStart
     case account
     case email
     case character
     case characterConfirmation
     case completion
-    case terms
-    case story
 }
 
 @Observable
