@@ -56,7 +56,7 @@ struct ContentView: View {
                 topic: flow.selectedStudyTopic ?? "선택한 분야",
                 onBack: flow.back
             ) { _ in
-                flow.move(to: .account)
+                flow.move(to: .character)
             }
         case .adultStart:
             AdultStartView(onBack: flow.back) {
@@ -68,11 +68,23 @@ struct ContentView: View {
             }
         case .email:
             ProfileNameView(onBack: flow.back) {
-                flow.move(to: .character)
+                flow.move(to: flow.selectedRole == .student ? .studentStart : .character)
             }
         case .character:
-            CharacterSelectionView(onBack: flow.back) {
-                flow.move(to: .terms)
+            CharacterSelectionView(
+                onBack: flow.back,
+                onContinue: flow.selectCharacter
+            )
+        case .characterConfirmation:
+            CharacterConfirmationView(
+                characterName: flow.selectedCharacterName ?? "대훈",
+                onBack: flow.back
+            ) {
+                flow.move(to: .completion)
+            }
+        case .completion:
+            SignUpCompletionView(role: flow.selectedRole ?? .student) {
+                flow.path.removeAll()
             }
         case .terms:
             TermsSelectionView(onBack: flow.back) {
