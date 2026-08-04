@@ -102,7 +102,7 @@ struct ChatView: View {
     private func messageBubble(_ message: ChatMessage) -> some View {
         HStack {
             if message.isMine { Spacer(minLength: 54) }
-            Text(message.text)
+            FormulaText(source: message.text)
                 .font(MOEUMTypography.buttonMedium)
                 .foregroundStyle(message.isMine ? Color.white : Color.moeumGray900)
                 .padding(.horizontal, 16)
@@ -190,6 +190,64 @@ private struct ChatMessage: Identifiable {
     let id = UUID()
     let text: String
     let isMine: Bool
+}
+
+private struct FormulaText: View {
+    let source: String
+
+    var body: some View {
+        Text(MathMarkup.formatted(source))
+    }
+}
+
+private enum MathMarkup {
+    static func formatted(_ source: String) -> AttributedString {
+        var text = source
+            .replacingOccurrences(of: "\\(", with: "")
+            .replacingOccurrences(of: "\\)", with: "")
+            .replacingOccurrences(of: "\\[", with: "")
+            .replacingOccurrences(of: "\\]", with: "")
+            .replacingOccurrences(of: "\\Omega", with: "Ω")
+            .replacingOccurrences(of: "\\times", with: "×")
+            .replacingOccurrences(of: "\\cdot", with: "·")
+            .replacingOccurrences(of: "\\pm", with: "±")
+            .replacingOccurrences(of: "\\leq", with: "≤")
+            .replacingOccurrences(of: "\\geq", with: "≥")
+            .replacingOccurrences(of: "\\neq", with: "≠")
+            .replacingOccurrences(of: "\\rightarrow", with: "→")
+            .replacingOccurrences(of: "\\degree", with: "°")
+
+        text = replacingFractions(in: text)
+        text = replacingCommand("sqrt", in: text, with: "√")
+        text = text.replacingOccurrences(of: "\\text{", with: "")
+            .replacingOccurrences(of: "}", with: "")
+
+        // The API uses Markdown emphasis for important parts of a question.
+        if let attributed = try? AttributedString(markdown: text) {
+            return attributed
+        }
+        return AttributedString(text)
+    }
+
+    private static func replacingFractions(in text: String) -> String {
+        var result = text
+        let pattern = #"\\frac\{([^{}]+)\}\{([^{}]+)\}"#
+        guard let regex = try? NSRegularExpression(pattern: pattern) else { return result }
+        while let match = regex.firstMatch(in: result, range: NSRange(result.startIndex..., in: result)) {
+            guard let wholeRange = Range(match.range, in: result),
+                  let numeratorRange = Range(match.range(at: 1), in: result),
+                  let denominatorRange = Range(match.range(at: 2), in: result) else { break }
+            let numerator = String(result[numeratorRange])
+            let denominator = String(result[denominatorRange])
+            result.replaceSubrange(wholeRange, with: "\(numerator)/\(denominator)")
+        }
+        return result
+    }
+
+    private static func replacingCommand(_ command: String, in text: String, with symbol: String) -> String {
+        text.replacingOccurrences(of: "\\\(command){", with: "\(symbol)(")
+            .replacingOccurrences(of: "}", with: ")")
+    }
 }
 
 #Preview {
