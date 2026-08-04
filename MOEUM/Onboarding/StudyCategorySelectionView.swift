@@ -38,6 +38,22 @@ struct StudyCategorySelectionView: View {
                 }
             }
             .scrollIndicators(.hidden)
+
+            HStack(spacing: 4) {
+                Spacer()
+                Text("만약 계정이 있으신가요?")
+                    .foregroundStyle(Color.moeumGray400)
+                Text("로그인")
+                    .foregroundStyle(Color.moeumMain500)
+                    .underline()
+            }
+            .font(MOEUMTypography.buttonSmallMedium)
+
+            MOEUMButton(title: "다음", isEnabled: selectedTopic != nil) {
+                if let selectedTopic {
+                    onContinue(selectedTopic)
+                }
+            }
         }
         .padding(.horizontal, 20)
         .padding(.top, 12)
