@@ -7,7 +7,7 @@ struct APIClient: Sendable {
     private let session: URLSession
 
     init(
-        baseURL: URL = URL(string: "http://127.0.0.1:3000/api")!,
+        baseURL: URL = URL(string: "http://165.140.22.54:4000/api")!,
         session: URLSession = .shared
     ) {
         self.baseURL = baseURL
