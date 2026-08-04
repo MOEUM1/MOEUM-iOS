@@ -5,6 +5,8 @@ struct HomeView: View {
     let accessToken: String
     @State private var selectedMode: LearningMode = .teaching
     @State private var isChatPresented = false
+    @State private var character: CharacterDetail?
+    @State private var streak: StreakResponse?
     private let weekdays = ["월", "화", "수", "목", "금", "토", "일"]
 
     var body: some View {
@@ -23,6 +25,7 @@ struct HomeView: View {
         .fullScreenCover(isPresented: $isChatPresented) {
             ChatView(theme: theme, accessToken: accessToken)
         }
+        .task { await loadDashboard() }
     }
 
     private var streakCard: some View {
@@ -33,7 +36,7 @@ struct HomeView: View {
                 .frame(width: 60, height: 60)
 
             VStack(alignment: .leading, spacing: 9) {
-                (Text("연속 학습 ") + Text("2").foregroundColor(theme.accentColor) + Text("일"))
+                (Text("연속 학습 ") + Text("\(streak?.count ?? 0)").foregroundColor(theme.accentColor) + Text("일"))
                     .font(MOEUMTypography.buttonSmallMedium)
 
                 HStack(spacing: 12) {
@@ -42,7 +45,7 @@ struct HomeView: View {
                             .font(MOEUMTypography.buttonSmallMedium)
                             .foregroundStyle(.white)
                             .frame(width: 26, height: 26)
-                            .background(index < 2 ? theme.accentColor : Color.moeumGray50)
+                            .background(index < min(streak?.count ?? 0, weekdays.count) ? theme.accentColor : Color.moeumGray50)
                             .clipShape(Circle())
                     }
                 }
@@ -112,24 +115,24 @@ struct HomeView: View {
 
     private var levelCard: some View {
         VStack(alignment: .leading, spacing: 10) {
-            Text("다음 레벨까지 25exp")
+            Text("다음 레벨까지 \(character?.expToNextLevel ?? 0)exp")
                 .font(MOEUMTypography.buttonSmallMedium)
 
             HStack {
-                levelMascot(label: "Lv. 1", scale: 62)
+                levelMascot(label: "Lv. \(character?.level ?? 1)", scale: 62, isCurrent: true)
                 Spacer()
-                Text("25exp")
+                Text("\(character?.exp ?? 0)exp")
                     .font(MOEUMTypography.h2Bold)
                     .foregroundStyle(theme.accentColor)
                 Spacer()
-                levelMascot(label: "Lv. 2", scale: 62)
+                levelMascot(label: "Lv. \((character?.level ?? 1) + 1)", scale: 62, isCurrent: false)
             }
 
             GeometryReader { proxy in
                 ZStack(alignment: .leading) {
                     Capsule().fill(Color.moeumGray100)
                     Capsule().fill(theme.accentColor)
-                        .frame(width: proxy.size.width * 0.67)
+                        .frame(width: proxy.size.width * levelProgress)
                 }
             }
             .frame(height: 13)
@@ -140,7 +143,14 @@ struct HomeView: View {
         .clipShape(RoundedRectangle(cornerRadius: 12))
     }
 
-    private func levelMascot(label: String, scale: CGFloat) -> some View {
+    private var levelProgress: CGFloat {
+        guard let character else { return 0 }
+        let target = character.exp + character.expToNextLevel
+        guard target > 0 else { return 0 }
+        return min(max(CGFloat(character.exp) / CGFloat(target), 0), 1)
+    }
+
+    private func levelMascot(label: String, scale: CGFloat, isCurrent: Bool) -> some View {
         VStack(spacing: 0) {
             Image(theme.assetName)
                 .resizable()
@@ -148,8 +158,16 @@ struct HomeView: View {
                 .frame(width: scale, height: 70)
             Text(label)
                 .font(MOEUMTypography.buttonSmallMedium)
-                .foregroundStyle(label == "Lv. 1" ? theme.accentColor : Color.moeumGray500)
+                .foregroundStyle(isCurrent ? theme.accentColor : Color.moeumGray500)
         }
+    }
+
+    @MainActor
+    private func loadDashboard() async {
+        async let characterRequest = APIClient.shared.myCharacter(accessToken: accessToken)
+        async let streakRequest = APIClient.shared.myStreak(accessToken: accessToken)
+        character = (try? await characterRequest)?.character
+        streak = try? await streakRequest
     }
 }
 
