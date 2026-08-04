@@ -17,7 +17,7 @@ struct CharacterSelectionView: View {
 
   var body: some View {
     ZStack {
-      VStack(alignment: .leading, spacing: 18) {
+      VStack(alignment: .leading, spacing: 0) {
         HStack(spacing: 14) {
           Button(action: onBack) {
             Image(systemName: "chevron.left")
@@ -27,31 +27,39 @@ struct CharacterSelectionView: View {
           PageDots(selection: 4, count: 6)
         }
 
-        Text("사용자님과 함께\n성장할 시우를 골라주세요!")
-          .font(MOEUMTypography.h2Bold)
+        Text("사용자님과 함께\n성장할 AI를 골라주세요!")
+          .font(MOEUMTypography.h1Bold)
           .foregroundStyle(Color.moeumGray900)
+          .padding(.top, 38)
 
-        LazyVGrid(columns: [.init(), .init()], spacing: 24) {
+        LazyVGrid(
+          columns: [
+            GridItem(.flexible(), spacing: 28),
+            GridItem(.flexible()),
+          ],
+          spacing: 42
+        ) {
           ForEach(characters) { character in
             Button {
               selection = character
             } label: {
-              VStack(spacing: 6) {
+              ZStack(alignment: .bottom) {
                 Image(character.assetName)
                   .resizable()
                   .scaledToFit()
-                  .frame(width: 94, height: 94)
-                  .padding(8)
-                  .background(selection == character ? Color.moeumMain50 : Color.clear)
-                  .clipShape(RoundedRectangle(cornerRadius: 12))
+                  .frame(width: 142, height: 154)
+
                 Text(character.name)
-                  .font(MOEUMTypography.captionBold)
+                  .font(MOEUMTypography.bodyBold)
                   .foregroundStyle(Color.moeumGray900)
+                  .offset(y: 5)
               }
+              .frame(height: 158)
             }
+            .buttonStyle(.plain)
           }
         }
-        .padding(.top, 18)
+        .padding(.top, 66)
 
         Spacer()
 
@@ -72,9 +80,9 @@ struct CharacterSelectionView: View {
           beginTransition()
         }
       }
-      .padding(.horizontal, 20)
-      .padding(.top, 10)
-      .padding(.bottom, 18)
+      .padding(.horizontal, 24)
+      .padding(.top, 18)
+      .padding(.bottom, 10)
 
       if let transitioningCharacter {
         Color.white
