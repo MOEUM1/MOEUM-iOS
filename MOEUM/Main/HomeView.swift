@@ -2,7 +2,9 @@ import SwiftUI
 
 struct HomeView: View {
     let theme: CharacterTheme
+    let accessToken: String
     @State private var selectedMode: LearningMode = .teaching
+    @State private var isChatPresented = false
     private let weekdays = ["월", "화", "수", "목", "금", "토", "일"]
 
     var body: some View {
@@ -18,6 +20,9 @@ struct HomeView: View {
         }
         .scrollIndicators(.hidden)
         .background(Color.moeumAppBackground)
+        .fullScreenCover(isPresented: $isChatPresented) {
+            ChatView(theme: theme, accessToken: accessToken)
+        }
     }
 
     private var streakCard: some View {
@@ -68,7 +73,7 @@ struct HomeView: View {
 
             Spacer(minLength: 8)
 
-            Button(selectedMode.actionTitle(characterName: theme.rawValue)) {}
+            Button(selectedMode.actionTitle(characterName: theme.rawValue), action: performSelectedMode)
                 .font(MOEUMTypography.buttonBold)
                 .foregroundStyle(.white)
                 .frame(maxWidth: .infinity)
@@ -81,6 +86,12 @@ struct HomeView: View {
         .frame(height: 335)
         .background(Color.white)
         .clipShape(RoundedRectangle(cornerRadius: 12))
+    }
+
+    private func performSelectedMode() {
+        if selectedMode == .teaching {
+            isChatPresented = true
+        }
     }
 
     private func modeButton(_ mode: LearningMode) -> some View {
@@ -167,5 +178,5 @@ private enum LearningMode: String, CaseIterable, Identifiable {
 }
 
 #Preview {
-    HomeView(theme: .yellow)
+    HomeView(theme: .yellow, accessToken: "preview")
 }

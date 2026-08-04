@@ -38,7 +38,7 @@ struct APIClient: Sendable {
         }
         guard 200..<300 ~= httpResponse.statusCode else {
             let payload = try? JSONDecoder.moeum.decode(APIErrorPayload.self, from: data)
-            throw APIError.server(statusCode: httpResponse.statusCode, message: payload?.message)
+            throw APIError.server(statusCode: httpResponse.statusCode, message: payload?.resolvedMessage)
         }
         return try JSONDecoder.moeum.decode(Response.self, from: data)
     }
@@ -65,6 +65,13 @@ enum APIError: LocalizedError {
 }
 
 private struct APIErrorPayload: Decodable {
+    let error: APIErrorDetail?
+    let message: String?
+
+    var resolvedMessage: String? { error?.message ?? message }
+}
+
+private struct APIErrorDetail: Decodable {
     let message: String?
 }
 

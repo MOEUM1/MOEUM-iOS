@@ -2,6 +2,7 @@ import SwiftUI
 
 struct MainTabView: View {
     let theme: CharacterTheme
+    let accessToken: String
     @State private var selection: MainTab = .home
 
     var body: some View {
@@ -9,7 +10,7 @@ struct MainTabView: View {
             Group {
                 switch selection {
                 case .home:
-                    HomeView(theme: theme)
+                    HomeView(theme: theme, accessToken: accessToken)
                 case .statistics:
                     LearningStatisticsView()
                 case .league:
@@ -75,5 +76,5 @@ private enum MainTab: String, CaseIterable, Identifiable {
 }
 
 #Preview {
-    MainTabView(theme: .yellow)
+    MainTabView(theme: .yellow, accessToken: "preview")
 }
