@@ -4,7 +4,6 @@ struct ContentView: View {
     private enum RootStage {
         case splash
         case introduction
-        case consent
         case welcome
         case main
     }
@@ -18,9 +17,7 @@ struct ContentView: View {
             case .splash:
                 SplashView { stage = .introduction }
             case .introduction:
-                IntroductionView { stage = .consent }
-            case .consent:
-                ConsentView { stage = .welcome }
+                IntroductionView { stage = .welcome }
             case .welcome:
                 signUpFlow
             case .main:
