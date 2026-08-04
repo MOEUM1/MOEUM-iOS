@@ -7,7 +7,7 @@ struct APIClient: Sendable {
     private let session: URLSession
 
     init(
-        baseURL: URL = URL(string: "http://165.140.22.54:4000/api")!,
+        baseURL: URL = URL(string: "http://test-backend-zd2tsl-803202-165-140-22-54.sslip.io/api")!,
         session: URLSession = .shared
     ) {
         self.baseURL = baseURL
@@ -20,7 +20,7 @@ struct APIClient: Sendable {
         body: (any Encodable)? = nil,
         accessToken: String? = nil
     ) async throws -> Response {
-        var request = URLRequest(url: baseURL.appending(path: path))
+        var request = URLRequest(url: makeURL(for: path))
         request.httpMethod = method.rawValue
         request.setValue("application/json", forHTTPHeaderField: "Accept")
 
@@ -41,6 +41,22 @@ struct APIClient: Sendable {
             throw APIError.server(statusCode: httpResponse.statusCode, message: payload?.resolvedMessage)
         }
         return try JSONDecoder.moeum.decode(Response.self, from: data)
+    }
+
+    private func makeURL(for path: String) -> URL {
+        guard let pathComponents = URLComponents(string: path) else {
+            return baseURL.appending(path: path)
+        }
+
+        var url = baseURL.appending(path: pathComponents.path)
+        guard let query = pathComponents.query,
+              var urlComponents = URLComponents(url: url, resolvingAgainstBaseURL: false) else {
+            return url
+        }
+
+        urlComponents.query = query
+        url = urlComponents.url ?? url
+        return url
     }
 }
 
