@@ -4,6 +4,7 @@ struct UserRoleCard: View {
     let title: String
     let subtitle: String
     let systemImage: String
+    var emoji: String? = nil
     let action: () -> Void
 
     var body: some View {
@@ -23,9 +24,15 @@ struct UserRoleCard: View {
 
                 Spacer()
 
-                Image(systemName: systemImage)
+                Group {
+                    if let emoji {
+                        Text(emoji)
+                    } else {
+                        Image(systemName: systemImage)
+                            .foregroundStyle(Color.moeumMain500)
+                    }
+                }
                     .font(.system(size: 34))
-                    .foregroundStyle(Color.moeumMain500)
                     .frame(width: 72, height: 72)
                     .background(Color.white)
                     .clipShape(Circle())
