@@ -34,12 +34,13 @@ struct PageDots: View {
     let count: Int
 
     var body: some View {
-        HStack(spacing: 6) {
+        HStack(spacing: 3) {
             ForEach(0..<count, id: \.self) { index in
-                Circle()
+                Capsule()
                     .fill(index == selection ? Color.moeumMain500 : Color.moeumGray200)
-                    .frame(width: 6, height: 6)
+                    .frame(width: index == selection ? 22 : 7, height: 7)
             }
         }
+        .animation(.easeInOut(duration: 0.2), value: selection)
     }
 }
