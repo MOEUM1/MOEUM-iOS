@@ -3,7 +3,6 @@ import SwiftUI
 enum OnboardingStep: Hashable {
     case introduction
     case welcome
-    case roleSelection
     case studentStart
     case studyDetail
     case account
@@ -16,7 +15,6 @@ enum OnboardingStep: Hashable {
 @Observable
 final class OnboardingFlow {
     var path: [OnboardingStep] = []
-    var selectedRole: UserRole?
     var selectedStudyTopic: String?
     var selectedCharacterName: String?
 
@@ -26,11 +24,6 @@ final class OnboardingFlow {
 
     func back() {
         _ = path.popLast()
-    }
-
-    func select(_ role: UserRole) {
-        selectedRole = role
-        move(to: .account)
     }
 
     func selectStudyTopic(_ topic: String) {

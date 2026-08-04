@@ -1,7 +1,6 @@
 import SwiftUI
 
 struct SignUpCompletionView: View {
-    let role: UserRole
     let onComplete: () -> Void
 
     var body: some View {
@@ -21,7 +20,7 @@ struct SignUpCompletionView: View {
                     .foregroundStyle(.white)
                     .frame(maxWidth: .infinity)
                     .frame(height: 48)
-                    .background(role == .student ? Color.moeumMain500 : Color.moeumCharacterDarkYellow)
+                    .background(Color.moeumCharacterDarkYellow)
                     .clipShape(RoundedRectangle(cornerRadius: 6))
             }
         }
@@ -32,5 +31,5 @@ struct SignUpCompletionView: View {
 }
 
 #Preview {
-    SignUpCompletionView(role: .student, onComplete: {})
+    SignUpCompletionView(onComplete: {})
 }

@@ -30,7 +30,7 @@ struct ContentView: View {
     private var signUpFlow: some View {
         NavigationStack(path: $flow.path) {
             WelcomeView {
-                flow.move(to: .roleSelection)
+                flow.move(to: .account)
             }
             .navigationDestination(for: OnboardingStep.self) { step in
                 destination(for: step)
@@ -43,9 +43,7 @@ struct ContentView: View {
     private func destination(for step: OnboardingStep) -> some View {
         switch step {
         case .introduction, .welcome:
-            WelcomeView { flow.move(to: .roleSelection) }
-        case .roleSelection:
-            UserRoleSelectionView(onSelect: flow.select)
+            WelcomeView { flow.move(to: .account) }
         case .studentStart:
             StudyCategorySelectionView(
                 onBack: flow.back,
@@ -64,7 +62,7 @@ struct ContentView: View {
             }
         case .email:
             ProfileNameView(onBack: flow.back) {
-                flow.move(to: flow.selectedRole == .student ? .studentStart : .character)
+                flow.move(to: .studentStart)
             }
         case .character:
             CharacterSelectionView(
@@ -79,7 +77,7 @@ struct ContentView: View {
                 flow.move(to: .completion)
             }
         case .completion:
-            SignUpCompletionView(role: flow.selectedRole ?? .student) {
+            SignUpCompletionView {
                 stage = .main
             }
         }
