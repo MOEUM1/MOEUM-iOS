@@ -5,6 +5,9 @@ struct UserRoleSelectionView: View {
 
     var body: some View {
         VStack(spacing: 20) {
+            MOEUMWordmark()
+                .padding(.top, 64)
+
             Spacer()
 
             UserRoleCard(
