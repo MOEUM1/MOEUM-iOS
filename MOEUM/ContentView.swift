@@ -101,11 +101,12 @@ struct ContentView: View {
     private func completeSignIn(_ response: AuthResponse) {
         accessToken = response.accessToken
         try? AuthTokenStore.shared.save(response.accessToken)
+        // Show the main shell immediately; profile theme hydration can happen in the background.
+        stage = .main
         Task {
             if let character = try? await APIClient.shared.myCharacter(accessToken: response.accessToken) {
                 characterTheme = CharacterTheme(characterName: character.character.name)
             }
-            stage = .main
         }
     }
 
