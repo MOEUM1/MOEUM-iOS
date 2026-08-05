@@ -16,7 +16,11 @@ struct WrittenExamView: View {
         NavigationStack {
             Group {
                 if isLoading { ProgressView("시험지를 만들고 있어요").tint(theme.accentColor) }
-                else if let result { ExperienceGainView(levelUp: result.levelUp, theme: theme, onConfirm: dismiss.callAsFunction) }
+                else if let result {
+                    ExamResultView(result: result, theme: theme,
+                                   onRetry: { self.result = nil; self.page = 0; Task { await start() } },
+                                   onNext: dismiss.callAsFunction)
+                }
                 else if let session { exam(session) }
                 else { retryView }
             }
