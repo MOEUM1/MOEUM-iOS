@@ -195,9 +195,12 @@ private var messageComposer: some View {
 
     @MainActor
     private func startChat() async {
-        isLoading = true
+        // Render the conversation shell immediately instead of blocking on the first API call.
+        isLoading = false
         errorMessage = nil
-        defer { isLoading = false }
+        messages = [ChatMessage(text: "질문을 준비하고 있어요...", isMine: false)]
+        isSending = true
+        defer { isSending = false }
         do {
             let response = try await APIClient.shared.startChat(accessToken: accessToken)
             historyId = response.historyId
