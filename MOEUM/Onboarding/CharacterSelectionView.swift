@@ -49,10 +49,6 @@ struct CharacterSelectionView: View {
                   .scaledToFit()
                   .frame(width: 142, height: 154)
 
-                Text(character.name)
-                  .font(MOEUMTypography.bodyBold)
-                  .foregroundStyle(Color.moeumGray900)
-                  .offset(y: 5)
               }
               .frame(height: 158)
             }
