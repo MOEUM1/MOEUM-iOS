@@ -14,9 +14,9 @@ struct AccountSetupView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
             OnboardingHeader(
-                title: "지금 가입하고,\n시우와 함께 성장해보세요.",
+                title: "지금 가입하고,\nAI와 함께 성장해보세요.",
                 progress: 0,
-                titleFont: .system(size: 24, weight: .bold),
+                titleFont: MOEUMTypography.h1Bold,
                 onBack: onBack
             )
 

@@ -8,11 +8,11 @@ struct SplashView: View {
             Spacer()
 
             Text("모음")
-                .font(.custom("OwnglyphEuiyeonChae", size: 56.364, relativeTo: .largeTitle))
+                .font(.custom("OwnglyphEuiyeonChae", size: 56.364))
                 .foregroundStyle(Color.moeumGray900)
 
             Text("폭 넓은 경험,")
-                .font(.custom("OwnglyphEuiyeonChae", size: 24, relativeTo: .title2))
+                .font(.custom("OwnglyphEuiyeonChae", size: 24))
                 .foregroundStyle(Color.moeumGray900)
 
             Spacer()
