@@ -9,6 +9,9 @@ struct HomeView: View {
     @State private var isExamPresented = false
     @State private var character: CharacterDetail?
     @State private var streak: StreakResponse?
+    @State private var isSadMascotAnimating = false
+    @State private var isHappyMascotAnimating = false
+    @State private var isLearningMascotAnimating = false
     private let weekdays = ["월", "화", "수", "목", "금", "토", "일"]
 
     var body: some View {
@@ -16,6 +19,7 @@ struct HomeView: View {
             VStack(spacing: 36) {
                 streakCard
                 learningCard
+                    .padding(.bottom, 12)
                 levelCard
             }
             .padding(.horizontal, 20)
@@ -30,14 +34,33 @@ struct HomeView: View {
         .fullScreenCover(isPresented: $isCardPresented) { CardGameView(theme: theme, accessToken: accessToken) }
         .fullScreenCover(isPresented: $isExamPresented) { WrittenExamView(theme: theme, accessToken: accessToken) }
         .task { await loadDashboard() }
+        .onChange(of: isCardPresented) { _, isPresented in
+            if !isPresented { Task { await loadDashboard() } }
+        }
+        .onChange(of: isExamPresented) { _, isPresented in
+            if !isPresented { Task { await loadDashboard() } }
+        }
+        .onAppear {
+            withAnimation(.easeInOut(duration: 0.8).repeatForever(autoreverses: true)) {
+                isSadMascotAnimating = true
+            }
+            withAnimation(.easeInOut(duration: 0.42).repeatForever(autoreverses: true)) {
+                isHappyMascotAnimating = true
+            }
+            withAnimation(.easeInOut(duration: 1.1).repeatForever(autoreverses: true)) {
+                isLearningMascotAnimating = true
+            }
+        }
     }
 
     private var streakCard: some View {
         HStack(spacing: 8) {
             Image("LearningFire")
                 .resizable()
+                .renderingMode(.template)
                 .scaledToFit()
                 .frame(width: 60, height: 60)
+                .foregroundStyle(streakCount >= 2 ? theme.accentColor : Color.moeumGray300)
 
             VStack(alignment: .leading, spacing: 9) {
                 (Text("연속 학습 ") + Text("\(streak?.count ?? 0)").foregroundColor(theme.accentColor) + Text("일"))
@@ -49,7 +72,7 @@ struct HomeView: View {
                             .font(MOEUMTypography.buttonSmallMedium)
                             .foregroundStyle(.white)
                             .frame(width: 26, height: 26)
-                            .background(index < min(streak?.count ?? 0, weekdays.count) ? theme.accentColor : Color.moeumGray50)
+                            .background(index < min(streakCount, weekdays.count) ? theme.accentColor : Color.moeumGray50)
                             .clipShape(Circle())
                     }
                 }
@@ -76,6 +99,8 @@ struct HomeView: View {
                 .resizable()
                 .scaledToFit()
                 .frame(width: 144, height: 156)
+                .offset(y: isLearningMascotAnimating ? -6 : 0)
+                .rotationEffect(.degrees(isLearningMascotAnimating ? 2 : -2), anchor: .bottom)
                 .id(theme)
 
             Spacer(minLength: 8)
@@ -156,12 +181,29 @@ struct HomeView: View {
         return min(max(CGFloat(character.exp) / CGFloat(target), 0), 1)
     }
 
+    private var streakCount: Int {
+        streak?.count ?? 0
+    }
+
     private func levelMascot(label: String, scale: CGFloat, isCurrent: Bool) -> some View {
         VStack(spacing: 0) {
-            Image(theme.assetName)
-                .resizable()
-                .scaledToFit()
-                .frame(width: scale, height: 70)
+            ZStack(alignment: .topTrailing) {
+                Image(theme.assetName)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: scale, height: 70)
+                    .offset(y: isCurrent && isSadMascotAnimating ? 2 : 0)
+                    .offset(y: !isCurrent && isHappyMascotAnimating ? -4 : 0)
+                    .scaleEffect(!isCurrent && isHappyMascotAnimating ? 1.03 : 1)
+                    .rotationEffect(.degrees(!isCurrent && isHappyMascotAnimating ? 7 : 0), anchor: .bottom)
+
+                if isCurrent {
+                    SadMascotFace(color: theme.accentColor)
+                        .frame(width: 22, height: 14)
+                        .offset(y: 17)
+                }
+
+            }
             Text(label)
                 .font(MOEUMTypography.buttonSmallMedium)
                 .foregroundStyle(isCurrent ? theme.accentColor : Color.moeumGray500)
@@ -174,6 +216,22 @@ struct HomeView: View {
         async let streakRequest = APIClient.shared.myStreak(accessToken: accessToken)
         character = (try? await characterRequest)?.character
         streak = try? await streakRequest
+    }
+}
+
+private struct SadMascotFace: View {
+    let color: Color
+
+    var body: some View {
+        Canvas { context, size in
+            let cover = Path(roundedRect: CGRect(x: 2, y: 4, width: size.width - 4, height: 7), cornerRadius: 3.5)
+            context.fill(cover, with: .color(color))
+
+            var mouth = Path()
+            mouth.move(to: CGPoint(x: 7, y: 6))
+            mouth.addQuadCurve(to: CGPoint(x: size.width - 7, y: 6), control: CGPoint(x: size.width / 2, y: 0))
+            context.stroke(mouth, with: .color(.black), style: StrokeStyle(lineWidth: 1.5, lineCap: .round))
+        }
     }
 }
 

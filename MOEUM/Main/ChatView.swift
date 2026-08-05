@@ -80,6 +80,11 @@ struct ChatView: View {
                             .id(message.id)
                     }
 
+                    if isSending {
+                        TypingIndicator(theme: theme)
+                            .transition(.opacity.combined(with: .move(edge: .bottom)))
+                    }
+
                     if let errorMessage {
                         Text(errorMessage)
                             .font(MOEUMTypography.buttonSmallMedium)
@@ -102,7 +107,7 @@ struct ChatView: View {
     private func messageBubble(_ message: ChatMessage) -> some View {
         HStack {
             if message.isMine { Spacer(minLength: 54) }
-            Text(message.text)
+            FormulaText(source: message.text)
                 .font(MOEUMTypography.buttonMedium)
                 .foregroundStyle(message.isMine ? Color.white : Color.moeumGray900)
                 .padding(.horizontal, 16)
@@ -121,7 +126,48 @@ struct ChatView: View {
         .frame(maxWidth: .infinity)
     }
 
-    private var messageComposer: some View {
+private struct TypingIndicator: View {
+    let theme: CharacterTheme
+    @State private var isAnimating = false
+
+    var body: some View {
+        HStack {
+            HStack(spacing: 5) {
+                ForEach(0..<3, id: \.self) { index in
+                    Circle()
+                        .fill(theme.accentColor)
+                        .frame(width: 7, height: 7)
+                        .scaleEffect(isAnimating ? 1 : 0.55)
+                        .opacity(isAnimating ? 1 : 0.45)
+                        .animation(
+                            .easeInOut(duration: 0.5)
+                                .repeatForever()
+                                .delay(Double(index) * 0.14),
+                            value: isAnimating
+                        )
+                }
+            }
+            .padding(.horizontal, 17)
+            .padding(.vertical, 13)
+            .background(Color.moeumGray50)
+            .clipShape(
+                UnevenRoundedRectangle(
+                    topLeadingRadius: 10,
+                    bottomLeadingRadius: 0,
+                    bottomTrailingRadius: 25,
+                    topTrailingRadius: 25
+                )
+            )
+            Spacer(minLength: 54)
+        }
+        .frame(maxWidth: .infinity)
+        .accessibilityLabel("AI가 답변을 입력하고 있어요")
+        .onAppear { isAnimating = true }
+        .onDisappear { isAnimating = false }
+    }
+}
+
+private var messageComposer: some View {
         HStack(spacing: 10) {
             TextField("메시지 입력 ...", text: $input, axis: .vertical)
                 .font(MOEUMTypography.buttonSmallMedium)
@@ -190,6 +236,64 @@ private struct ChatMessage: Identifiable {
     let id = UUID()
     let text: String
     let isMine: Bool
+}
+
+private struct FormulaText: View {
+    let source: String
+
+    var body: some View {
+        Text(MathMarkup.formatted(source))
+    }
+}
+
+private enum MathMarkup {
+    static func formatted(_ source: String) -> AttributedString {
+        var text = source
+            .replacingOccurrences(of: "\\(", with: "")
+            .replacingOccurrences(of: "\\)", with: "")
+            .replacingOccurrences(of: "\\[", with: "")
+            .replacingOccurrences(of: "\\]", with: "")
+            .replacingOccurrences(of: "\\Omega", with: "Ω")
+            .replacingOccurrences(of: "\\times", with: "×")
+            .replacingOccurrences(of: "\\cdot", with: "·")
+            .replacingOccurrences(of: "\\pm", with: "±")
+            .replacingOccurrences(of: "\\leq", with: "≤")
+            .replacingOccurrences(of: "\\geq", with: "≥")
+            .replacingOccurrences(of: "\\neq", with: "≠")
+            .replacingOccurrences(of: "\\rightarrow", with: "→")
+            .replacingOccurrences(of: "\\degree", with: "°")
+
+        text = replacingFractions(in: text)
+        text = replacingCommand("sqrt", in: text, with: "√")
+        text = text.replacingOccurrences(of: "\\text{", with: "")
+            .replacingOccurrences(of: "}", with: "")
+
+        // The API uses Markdown emphasis for important parts of a question.
+        if let attributed = try? AttributedString(markdown: text) {
+            return attributed
+        }
+        return AttributedString(text)
+    }
+
+    private static func replacingFractions(in text: String) -> String {
+        var result = text
+        let pattern = #"\\frac\{([^{}]+)\}\{([^{}]+)\}"#
+        guard let regex = try? NSRegularExpression(pattern: pattern) else { return result }
+        while let match = regex.firstMatch(in: result, range: NSRange(result.startIndex..., in: result)) {
+            guard let wholeRange = Range(match.range, in: result),
+                  let numeratorRange = Range(match.range(at: 1), in: result),
+                  let denominatorRange = Range(match.range(at: 2), in: result) else { break }
+            let numerator = String(result[numeratorRange])
+            let denominator = String(result[denominatorRange])
+            result.replaceSubrange(wholeRange, with: "\(numerator)/\(denominator)")
+        }
+        return result
+    }
+
+    private static func replacingCommand(_ command: String, in text: String, with symbol: String) -> String {
+        text.replacingOccurrences(of: "\\\(command){", with: "\(symbol)(")
+            .replacingOccurrences(of: "}", with: ")")
+    }
 }
 
 #Preview {

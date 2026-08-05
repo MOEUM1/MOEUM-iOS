@@ -16,7 +16,7 @@ struct WrittenExamView: View {
         NavigationStack {
             Group {
                 if isLoading { ProgressView("시험지를 만들고 있어요").tint(theme.accentColor) }
-                else if let result { resultView(result) }
+                else if let result { ExperienceGainView(levelUp: result.levelUp, theme: theme, onConfirm: dismiss.callAsFunction) }
                 else if let session { exam(session) }
                 else { retryView }
             }
@@ -55,19 +55,6 @@ struct WrittenExamView: View {
         ContentUnavailableView { Label("시험지를 불러오지 못했어요", systemImage: "doc.text.magnifyingglass") }
         description: { Text(error ?? "잠시 후 다시 시도해주세요.") }
         actions: { Button("다시 시도") { Task { await start() } }.buttonStyle(.borderedProminent).tint(theme.accentColor) }
-    }
-
-    private func resultView(_ result: QuizResultResponse) -> some View {
-        ScrollView { VStack(spacing: 16) {
-            Image(theme.assetName).resizable().scaledToFit().frame(width: 150, height: 160)
-            Text("채점 완료").font(MOEUMTypography.h1Bold)
-            Text("\(result.correctCount) / \(result.totalCount) 정답 · \(result.levelUp.gainedExp) exp 획득")
-            ForEach(result.grade, id: \.index) { grade in
-                VStack(alignment: .leading, spacing: 6) { Text("\(grade.index)번 \(grade.isCorrect ? "정답" : "오답")").font(MOEUMTypography.buttonBold); Text(grade.explaination) }
-                    .padding().frame(maxWidth: .infinity, alignment: .leading).background(Color.moeumAppBackground).clipShape(RoundedRectangle(cornerRadius: 10))
-            }
-            Button("확인", action: dismiss.callAsFunction).buttonStyle(.borderedProminent).tint(theme.accentColor)
-        }.padding(24) }
     }
 
     private func answerBinding(for index: Int) -> Binding<String> { Binding(get: { answers[index, default: ""] }, set: { answers[index] = $0 }) }

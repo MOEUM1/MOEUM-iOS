@@ -16,7 +16,7 @@ struct CardGameView: View {
         NavigationStack {
             Group {
                 if isLoading { ProgressView("문제를 만들고 있어요").tint(theme.accentColor) }
-                else if let result { resultView(result) }
+        else if let result { ExperienceGainView(levelUp: result.levelUp, theme: theme, onConfirm: dismiss.callAsFunction) }
                 else if let session { game(session) }
                 else { retryView }
             }

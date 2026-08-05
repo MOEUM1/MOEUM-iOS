@@ -2,6 +2,8 @@ import Charts
 import SwiftUI
 
 struct LearningStatisticsView: View {
+    let theme: CharacterTheme
+    @State private var animateWeeklyBars = false
     private let firstMonths = ["SEP", "OCT", "NOV", "DEC", "JAN", "FEB"]
     private let secondMonths = ["MAR", "APR", "MAY", "JUN", "JUL", "AUG"]
     private let weeklyData = [
@@ -68,10 +70,11 @@ struct LearningStatisticsView: View {
 
     private func contributionColor(for index: Int) -> Color {
         switch (index * 7 + index / 9) % 6 {
-        case 0: Color.moeumCharacterDarkYellow
-        case 1: Color.moeumCharacterLightYellow.opacity(0.8)
-        case 2: Color.moeumGray300
-        case 3: Color.moeumGray200
+        case 0: theme.accentColor
+        case 1: theme.accentColor.opacity(0.8)
+        case 2: theme.accentColor.opacity(0.55)
+        case 3: Color.moeumGray300
+        case 4: Color.moeumGray200
         default: Color.moeumGray100
         }
     }
@@ -84,9 +87,9 @@ struct LearningStatisticsView: View {
             Chart(weeklyData) { item in
                 BarMark(
                     x: .value("요일", item.day),
-                    y: .value("학습 시간", item.minutes)
+                    y: .value("학습 시간", animateWeeklyBars ? item.minutes : 0)
                 )
-                .foregroundStyle(item.day == "수" ? Color.moeumCharacterDarkYellow : Color.moeumGray300)
+                .foregroundStyle(item.day == "수" ? theme.accentColor : Color.moeumGray300)
                 .cornerRadius(4)
             }
             .chartYAxis(.hidden)
@@ -96,17 +99,24 @@ struct LearningStatisticsView: View {
                         if let day = value.as(String.self) {
                             Text(day)
                                 .font(MOEUMTypography.captionMedium)
-                                .foregroundStyle(day == "수" ? Color.moeumCharacterDarkYellow : Color.moeumGray900)
+                                .foregroundStyle(day == "수" ? theme.accentColor : Color.moeumGray900)
                         }
                     }
                 }
             }
             .frame(height: 210)
+            .animation(.interpolatingSpring(stiffness: 170, damping: 10), value: animateWeeklyBars)
         }
         .padding(20)
         .frame(maxWidth: .infinity, minHeight: 278, alignment: .topLeading)
         .background(Color.white)
         .clipShape(RoundedRectangle(cornerRadius: 12))
+        .onAppear {
+            animateWeeklyBars = false
+            withAnimation(.interpolatingSpring(stiffness: 170, damping: 10).delay(0.08)) {
+                animateWeeklyBars = true
+            }
+        }
     }
 }
 
@@ -117,5 +127,5 @@ private struct StudyDay: Identifiable {
 }
 
 #Preview {
-    LearningStatisticsView()
+    LearningStatisticsView(theme: .yellow)
 }
