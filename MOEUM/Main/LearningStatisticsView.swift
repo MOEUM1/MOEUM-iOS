@@ -3,18 +3,22 @@ import SwiftUI
 
 struct LearningStatisticsView: View {
     let theme: CharacterTheme
+    let accessToken: String
     @State private var animateWeeklyBars = false
+    @State private var studyCounts: [String: Int] = [:]
     private let firstMonths = ["SEP", "OCT", "NOV", "DEC", "JAN", "FEB"]
     private let secondMonths = ["MAR", "APR", "MAY", "JUN", "JUL", "AUG"]
-    private let weeklyData = [
-        StudyDay(day: "월", minutes: 82),
-        StudyDay(day: "화", minutes: 18),
-        StudyDay(day: "수", minutes: 58),
-        StudyDay(day: "목", minutes: 3),
-        StudyDay(day: "금", minutes: 3),
-        StudyDay(day: "토", minutes: 3),
-        StudyDay(day: "일", minutes: 3),
-    ]
+    private var weeklyData: [StudyDay] {
+        let calendar = Calendar.current
+        let today = calendar.startOfDay(for: .now)
+        let symbols = ["월", "화", "수", "목", "금", "토", "일"]
+        return symbols.enumerated().map { index, day in
+            let weekday = index + 2
+            let delta = (calendar.component(.weekday, from: today) - weekday + 7) % 7
+            let date = calendar.date(byAdding: .day, value: -delta, to: today) ?? today
+            return StudyDay(day: day, minutes: (studyCounts[dateKey(date)] ?? 0) * 15)
+        }
+    }
 
     var body: some View {
         ScrollView {
@@ -32,6 +36,7 @@ struct LearningStatisticsView: View {
         }
         .scrollIndicators(.hidden)
         .background(Color.moeumAppBackground)
+        .task { await loadStudyHistory() }
     }
 
     private var annualCard: some View {
@@ -69,13 +74,34 @@ struct LearningStatisticsView: View {
     }
 
     private func contributionColor(for index: Int) -> Color {
-        switch (index * 7 + index / 9) % 6 {
-        case 0: theme.accentColor
-        case 1: theme.accentColor.opacity(0.8)
-        case 2: theme.accentColor.opacity(0.55)
-        case 3: Color.moeumGray300
-        case 4: Color.moeumGray200
-        default: Color.moeumGray100
+        let date = Calendar.current.date(byAdding: .day, value: -(index % 168), to: Calendar.current.startOfDay(for: .now)) ?? .now
+        return switch studyCounts[dateKey(date)] ?? 0 {
+        case 0: Color.moeumGray100
+        case 1: theme.accentColor.opacity(0.35)
+        case 2: theme.accentColor.opacity(0.6)
+        default: theme.accentColor
+        }
+    }
+
+    private func dateKey(_ date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.calendar = Calendar(identifier: .gregorian)
+        formatter.locale = Locale(identifier: "en_US_POSIX")
+        formatter.dateFormat = "yyyy-MM-dd"
+        return formatter.string(from: date)
+    }
+
+    @MainActor
+    private func loadStudyHistory() async {
+        let to = Date()
+        let from = Calendar.current.date(byAdding: .day, value: -365, to: to) ?? to
+        guard let response = try? await APIClient.shared.histories(from: from, to: to, accessToken: accessToken) else { return }
+        var counts: [String: Int] = [:]
+        for history in response.histories {
+            counts[dateKey(history.createdAt), default: 0] += 1
+        }
+        withAnimation(.easeOut(duration: 0.35)) {
+            studyCounts = counts
         }
     }
 
@@ -127,5 +153,5 @@ private struct StudyDay: Identifiable {
 }
 
 #Preview {
-    LearningStatisticsView(theme: .yellow)
+    LearningStatisticsView(theme: .yellow, accessToken: "preview")
 }

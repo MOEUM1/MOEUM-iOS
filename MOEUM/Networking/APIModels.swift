@@ -82,6 +82,24 @@ struct MyLeagueRankResponse: Decodable {
     let totalExp: Int
 }
 
+struct HistoryRangeResponse: Decodable {
+    let from: Date
+    let to: Date
+    let total: Int
+    let take: Int
+    let skip: Int
+    let byType: [String: Int]
+    let studyDays: Int
+    let histories: [HistorySummary]
+}
+
+struct HistorySummary: Decodable, Identifiable {
+    let id: String
+    let type: String
+    let createdAt: Date
+    let updatedAt: Date
+}
+
 struct ChatStartResponse: Decodable {
     let historyId: String
     let subject: String
@@ -184,6 +202,13 @@ extension APIClient {
 
     func myLeagueRank(accessToken: String) async throws -> MyLeagueRankResponse {
         try await send("leagues/me", accessToken: accessToken)
+    }
+
+    func histories(from: Date, to: Date, accessToken: String) async throws -> HistoryRangeResponse {
+        let formatter = ISO8601DateFormatter()
+        formatter.formatOptions = [.withInternetDateTime, .withFractionalSeconds]
+        let query = "histories/range?from=\(formatter.string(from: from))&to=\(formatter.string(from: to))&take=100&skip=0"
+        return try await send(query, accessToken: accessToken)
     }
 
     func startChat(accessToken: String) async throws -> ChatStartResponse {
