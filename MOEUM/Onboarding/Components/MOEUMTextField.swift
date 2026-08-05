@@ -10,7 +10,7 @@ struct MOEUMTextField: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             Text(title)
-                .font(MOEUMTypography.buttonSmallMedium)
+                .font(MOEUMTypography.captionMedium)
                 .foregroundStyle(Color.moeumGray600)
 
             Group {
@@ -20,11 +20,11 @@ struct MOEUMTextField: View {
                     TextField(placeholder, text: $text)
                 }
             }
-            .font(MOEUMTypography.bodyMedium)
+            .font(MOEUMTypography.buttonMedium)
             .textInputAutocapitalization(.never)
             .padding(.leading, 18)
             .padding(.trailing, isSecure ? 48 : 18)
-            .frame(height: 58)
+            .frame(height: 56)
             .background {
                 RoundedRectangle(cornerRadius: 14)
                     .fill(Color.white)

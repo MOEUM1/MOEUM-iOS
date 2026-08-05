@@ -16,7 +16,7 @@ struct AccountSetupView: View {
             OnboardingHeader(
                 title: "지금 가입하고,\n시우와 함께 성장해보세요.",
                 progress: 0,
-                titleFont: .system(size: 30, weight: .bold),
+                titleFont: .system(size: 24, weight: .bold),
                 onBack: onBack
             )
 
