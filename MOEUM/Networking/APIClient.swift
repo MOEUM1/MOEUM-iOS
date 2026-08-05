@@ -33,7 +33,15 @@ struct APIClient: Sendable {
             request.httpBody = try JSONEncoder.moeum.encode(AnyEncodable(body))
         }
 
-        let (data, response) = try await session.data(for: request)
+        let data: Data
+        let response: URLResponse
+        do {
+            (data, response) = try await session.data(for: request)
+        } catch let error as URLError where error.code == .timedOut {
+            throw APIError.timeout
+        } catch {
+            throw error
+        }
         guard let httpResponse = response as? HTTPURLResponse else {
             throw APIError.invalidResponse
         }
@@ -69,12 +77,15 @@ enum HTTPMethod: String, Sendable {
 
 enum APIError: LocalizedError {
     case invalidResponse
+    case timeout
     case server(statusCode: Int, message: String?)
 
     var errorDescription: String? {
         switch self {
         case .invalidResponse:
             "서버 응답을 확인할 수 없습니다."
+        case .timeout:
+            "서버 응답이 지연되고 있습니다. 잠시 후 다시 시도해주세요."
         case let .server(statusCode, message):
             message ?? "서버 요청에 실패했습니다. (\(statusCode))"
         }
