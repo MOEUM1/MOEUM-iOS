@@ -82,6 +82,7 @@ struct HomeView: View {
         .frame(maxWidth: .infinity, minHeight: 84, alignment: .leading)
         .background(Color.white)
         .clipShape(RoundedRectangle(cornerRadius: 12))
+        .shadow(color: .black.opacity(0.15), radius: 9, x: 0, y: 4)
     }
 
     private var learningCard: some View {
@@ -118,6 +119,7 @@ struct HomeView: View {
         .frame(height: 335)
         .background(Color.white)
         .clipShape(RoundedRectangle(cornerRadius: 12))
+        .shadow(color: .black.opacity(0.15), radius: 9.9, x: 0, y: 19)
     }
 
     private func performSelectedMode() {
@@ -172,6 +174,7 @@ struct HomeView: View {
         .frame(height: 167)
         .background(Color.white)
         .clipShape(RoundedRectangle(cornerRadius: 12))
+        .shadow(color: .black.opacity(0.15), radius: 9, x: 0, y: 4)
     }
 
     private var levelProgress: CGFloat {
