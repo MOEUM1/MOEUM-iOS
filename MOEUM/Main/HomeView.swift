@@ -194,12 +194,12 @@ struct HomeView: View {
                     .offset(y: isCurrent && isSadMascotAnimating ? 2 : 0)
                     .offset(y: !isCurrent && isHappyMascotAnimating ? -4 : 0)
                     .scaleEffect(!isCurrent && isHappyMascotAnimating ? 1.03 : 1)
-                    .rotationEffect(.degrees(!isCurrent && isHappyMascotAnimating ? 4 : 0), anchor: .bottom)
+                    .rotationEffect(.degrees(!isCurrent && isHappyMascotAnimating ? 7 : 0), anchor: .bottom)
 
                 if isCurrent {
                     SadMascotFace(color: theme.accentColor)
-                        .frame(width: 24, height: 14)
-                        .offset(y: -7)
+                        .frame(width: 22, height: 14)
+                        .offset(y: 17)
                 }
 
             }
