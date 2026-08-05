@@ -19,6 +19,7 @@ struct HomeView: View {
             VStack(spacing: 36) {
                 streakCard
                 learningCard
+                    .padding(.bottom, 12)
                 levelCard
             }
             .padding(.horizontal, 20)
