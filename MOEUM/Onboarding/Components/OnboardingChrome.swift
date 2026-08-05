@@ -13,11 +13,13 @@ struct MOEUMWordmark: View {
 struct OnboardingHeader: View {
     let title: String
     var progress: Int?
+    var titleFont: Font = MOEUMTypography.h2Bold
     let onBack: () -> Void
 
-    init(title: String, progress: Int? = nil, onBack: @escaping () -> Void) {
+    init(title: String, progress: Int? = nil, titleFont: Font = MOEUMTypography.h2Bold, onBack: @escaping () -> Void) {
         self.title = title
         self.progress = progress
+        self.titleFont = titleFont
         self.onBack = onBack
     }
 
@@ -37,7 +39,7 @@ struct OnboardingHeader: View {
             }
 
             Text(title)
-                .font(MOEUMTypography.h2Bold)
+                .font(titleFont)
                 .foregroundStyle(Color.moeumGray900)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
