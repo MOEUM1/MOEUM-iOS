@@ -32,9 +32,9 @@ struct MainTabView: View {
                                 .resizable()
                                 .renderingMode(.template)
                                 .scaledToFit()
-                                .frame(width: 34, height: 34)
+                                .frame(width: 28, height: 28)
                             Text(tab.title)
-                                .font(MOEUMTypography.captionMedium)
+                                .font(.custom("Pretendard-Medium", size: 14))
                         }
                         .foregroundStyle(selection == tab ? theme.accentColor : Color.moeumGray500)
                         .frame(maxWidth: .infinity)

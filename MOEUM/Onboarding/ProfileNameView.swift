@@ -19,7 +19,7 @@ struct ProfileNameView: View {
                 onContinue(name.trimmingCharacters(in: .whitespaces))
             }
         }
-        .padding(.horizontal, 20)
+        .padding(.horizontal, 24)
         .padding(.top, 10)
         .padding(.bottom, 18)
         .background(Color.white)

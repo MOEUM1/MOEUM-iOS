@@ -55,7 +55,7 @@ struct ChatView: View {
 
             HStack(spacing: 10) {
                 Rectangle().fill(Color.moeumGray200).frame(height: 1)
-                Text(Date.now.formatted(.dateTime.month().day()))
+                Text(Date.now.formatted(.dateTime.locale(Locale(identifier: "ko_KR")).month(.defaultDigits).day()))
                     .font(MOEUMTypography.buttonSmallMedium)
                     .foregroundStyle(Color.moeumGray200)
                 Rectangle().fill(Color.moeumGray200).frame(height: 1)
@@ -173,15 +173,15 @@ private var messageComposer: some View {
                 .font(MOEUMTypography.buttonSmallMedium)
                 .lineLimit(1...4)
                 .padding(.horizontal, 16)
-                .frame(minHeight: 42)
+                .frame(height: 35)
                 .background(Color.moeumAppBackground)
                 .clipShape(Capsule())
 
             Button { Task { await sendMessage() } } label: {
                 Image(systemName: "arrow.up")
-                    .font(.system(size: 18, weight: .bold))
+                    .font(.system(size: 16, weight: .bold))
                     .foregroundStyle(.white)
-                    .frame(width: 42, height: 42)
+                    .frame(width: 35, height: 35)
                     .background(theme.accentColor)
                     .clipShape(Circle())
             }
@@ -189,7 +189,7 @@ private var messageComposer: some View {
             .opacity(isSending ? 0.5 : 1)
         }
         .padding(.horizontal, 16)
-        .padding(.vertical, 8)
+        .padding(.vertical, 6)
         .overlay(alignment: .top) { Divider() }
     }
 

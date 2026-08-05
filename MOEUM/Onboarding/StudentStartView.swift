@@ -23,7 +23,7 @@ struct StudentStartView: View {
 
             MOEUMButton(title: "학생용 페이지 시작", action: onContinue)
         }
-        .padding(.horizontal, 20)
+        .padding(.horizontal, 24)
         .padding(.top, 10)
         .padding(.bottom, 18)
         .background(Color.white)

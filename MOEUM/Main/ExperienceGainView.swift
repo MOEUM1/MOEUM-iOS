@@ -10,7 +10,7 @@ struct ExperienceGainView: View {
             HStack {
                 Button(action: onConfirm) {
                     Image(systemName: "chevron.left")
-                        .font(.system(size: 28, weight: .medium))
+                    .font(.system(size: 24, weight: .medium))
                         .foregroundStyle(Color.moeumGray900)
                 }
                 .accessibilityLabel("뒤로")
@@ -29,21 +29,21 @@ struct ExperienceGainView: View {
                 }
                 .overlay {
                     Text("XP")
-                        .font(.system(size: 64, weight: .medium))
+                        .font(.system(size: 80, weight: .bold))
                         .foregroundStyle(.white.opacity(0.82))
                 }
                 .frame(width: 200, height: 200)
 
             VStack(spacing: 4) {
                 Text("경험치 상승!")
-                    .font(.system(size: 32, weight: .bold))
+                    .font(.custom("Pretendard-Bold", size: 28))
                     .foregroundStyle(theme.accentColor)
                 Text("+\(levelUp.gainedExp) exp를 얻었어요!")
-                    .font(.system(size: 31, weight: .bold))
+                    .font(.custom("Pretendard-Bold", size: 28))
                     .foregroundStyle(Color.moeumGray900)
             }
             .multilineTextAlignment(.center)
-            .padding(.top, 118)
+            .padding(.top, 84)
 
             if levelUp.leveledUp {
                 Text("Lv. \(levelUp.after.level)로 레벨업했어요")
@@ -60,7 +60,7 @@ struct ExperienceGainView: View {
                 .frame(maxWidth: .infinity)
                 .frame(height: 57)
                 .background(theme.accentColor)
-                .clipShape(RoundedRectangle(cornerRadius: 16))
+                .clipShape(RoundedRectangle(cornerRadius: 12))
                 .padding(.horizontal, 24)
                 .padding(.bottom, 24)
         }

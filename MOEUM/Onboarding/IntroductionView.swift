@@ -32,7 +32,7 @@ struct IntroductionView: View {
                 }
             }
         }
-        .padding(.horizontal, 20)
+        .padding(.horizontal, 24)
         .padding(.bottom, 18)
         .background(Color.white)
     }
