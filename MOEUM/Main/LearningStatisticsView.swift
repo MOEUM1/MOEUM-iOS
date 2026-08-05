@@ -53,7 +53,7 @@ struct LearningStatisticsView: View {
             HStack {
                 ForEach(months, id: \.self) { month in
                     Text(month)
-                        .font(.custom("Pretendard-Medium", size: 8, relativeTo: .caption2))
+                        .font(.custom("Pretendard-Medium", size: 8))
                         .frame(maxWidth: .infinity)
                 }
             }

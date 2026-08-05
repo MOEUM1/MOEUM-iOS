@@ -14,7 +14,7 @@ struct SignUpCompletionView: View {
                 .frame(width: 298, height: 321)
 
             Text("회원가입이\n완료되었어요!")
-                .font(.custom("Pretendard-Bold", size: 28, relativeTo: .title))
+                .font(.custom("Pretendard-Bold", size: 28))
                 .multilineTextAlignment(.center)
                 .foregroundStyle(Color.moeumGray900)
                 .padding(.top, 16)

@@ -5,7 +5,7 @@ struct MOEUMWordmark: View {
 
     var body: some View {
         Text("MOEUM")
-            .font(.custom("OwnglyphEuiyeonChae", size: size, relativeTo: .title))
+            .font(.custom("OwnglyphEuiyeonChae", size: size))
             .foregroundStyle(Color.moeumGray900)
     }
 }

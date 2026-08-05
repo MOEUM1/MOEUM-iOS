@@ -29,6 +29,9 @@ struct ContentView: View {
             }
         }
         .animation(.easeInOut(duration: 0.22), value: stage)
+        // Figma frames are authored at the default text size. Keep the canvas
+        // stable across simulator accessibility settings during visual QA.
+        .dynamicTypeSize(.medium)
     }
 
     private var signUpFlow: some View {
