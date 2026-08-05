@@ -188,14 +188,21 @@ struct HomeView: View {
     private func levelMascot(label: String, scale: CGFloat, isCurrent: Bool) -> some View {
         VStack(spacing: 0) {
             ZStack(alignment: .topTrailing) {
-                Image(theme.assetName)
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: scale, height: 70)
-                    .offset(y: isCurrent && isSadMascotAnimating ? 2 : 0)
-                    .offset(y: !isCurrent && isHappyMascotAnimating ? -4 : 0)
-                    .scaleEffect(!isCurrent && isHappyMascotAnimating ? 1.03 : 1)
-                    .rotationEffect(.degrees(!isCurrent && isHappyMascotAnimating ? 7 : 0), anchor: .bottom)
+                ZStack {
+                    Image(theme.assetName)
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: scale, height: 70)
+                    if isCurrent {
+                        SadMascotFace()
+                            .frame(width: 24, height: 18)
+                            .offset(y: -10)
+                    }
+                }
+                .offset(y: isCurrent && isSadMascotAnimating ? 2 : 0)
+                .offset(y: !isCurrent && isHappyMascotAnimating ? -4 : 0)
+                .scaleEffect(!isCurrent && isHappyMascotAnimating ? 1.03 : 1)
+                .rotationEffect(.degrees(!isCurrent && isHappyMascotAnimating ? 7 : 0), anchor: .bottom)
 
             }
             Text(label)
@@ -210,6 +217,23 @@ struct HomeView: View {
         async let streakRequest = APIClient.shared.myStreak(accessToken: accessToken)
         character = (try? await characterRequest)?.character
         streak = try? await streakRequest
+    }
+}
+
+private struct SadMascotFace: View {
+    var body: some View {
+        Canvas { context, size in
+            var leftBrow = Path()
+            leftBrow.move(to: CGPoint(x: 2, y: 4)); leftBrow.addLine(to: CGPoint(x: 9, y: 1))
+            var rightBrow = Path()
+            rightBrow.move(to: CGPoint(x: size.width - 2, y: 4)); rightBrow.addLine(to: CGPoint(x: size.width - 9, y: 1))
+            context.stroke(leftBrow, with: .color(.black), style: StrokeStyle(lineWidth: 2, lineCap: .round))
+            context.stroke(rightBrow, with: .color(.black), style: StrokeStyle(lineWidth: 2, lineCap: .round))
+            var mouth = Path()
+            mouth.move(to: CGPoint(x: 7, y: size.height - 3))
+            mouth.addQuadCurve(to: CGPoint(x: size.width - 7, y: size.height - 3), control: CGPoint(x: size.width / 2, y: size.height - 8))
+            context.stroke(mouth, with: .color(.black), style: StrokeStyle(lineWidth: 2, lineCap: .round))
+        }
     }
 }
 
