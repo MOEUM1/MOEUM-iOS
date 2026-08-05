@@ -55,7 +55,7 @@ struct ChatView: View {
 
             HStack(spacing: 10) {
                 Rectangle().fill(Color.moeumGray200).frame(height: 1)
-                Text(Date.now.formatted(.dateTime.month().day()))
+                Text(Date.now.formatted(.dateTime.locale(Locale(identifier: "ko_KR")).month(.defaultDigits).day()))
                     .font(MOEUMTypography.buttonSmallMedium)
                     .foregroundStyle(Color.moeumGray200)
                 Rectangle().fill(Color.moeumGray200).frame(height: 1)
