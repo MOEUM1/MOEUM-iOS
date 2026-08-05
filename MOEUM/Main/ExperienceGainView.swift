@@ -32,7 +32,7 @@ struct ExperienceGainView: View {
                         .font(.system(size: 64, weight: .medium))
                         .foregroundStyle(.white.opacity(0.82))
                 }
-                .frame(width: 184, height: 184)
+                .frame(width: 200, height: 200)
 
             VStack(spacing: 4) {
                 Text("경험치 상승!")
@@ -58,10 +58,10 @@ struct ExperienceGainView: View {
                 .font(MOEUMTypography.buttonBold)
                 .foregroundStyle(.white)
                 .frame(maxWidth: .infinity)
-                .frame(height: 64)
+                .frame(height: 57)
                 .background(theme.accentColor)
                 .clipShape(RoundedRectangle(cornerRadius: 16))
-                .padding(.horizontal, 32)
+                .padding(.horizontal, 24)
                 .padding(.bottom, 24)
         }
         .background(Color.white.ignoresSafeArea())
