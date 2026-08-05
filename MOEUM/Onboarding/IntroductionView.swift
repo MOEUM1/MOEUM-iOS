@@ -21,7 +21,7 @@ struct IntroductionView: View {
             .tabViewStyle(.page(indexDisplayMode: .never))
             .frame(height: 80)
 
-            PageDots(selection: page, count: messages.count)
+            PageDots(selection: page, count: 3)
                 .padding(.bottom, 18)
 
             MOEUMButton(title: page == 2 ? "시작하기" : "다음") {
