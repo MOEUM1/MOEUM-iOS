@@ -4,12 +4,6 @@ struct IntroductionView: View {
     let onFinished: () -> Void
     @State private var page = 0
 
-    private let messages = [
-        "어떤 이야기를 넣을까",
-        "어떤 이야기를 넣지",
-        "무슨 얘기를 넣을까",
-    ]
-
     var body: some View {
         VStack {
             MOEUMWordmark(size: 64)
@@ -18,11 +12,9 @@ struct IntroductionView: View {
             Spacer()
 
             TabView(selection: $page) {
-                ForEach(messages.indices, id: \.self) { index in
-                    Text(messages[index])
+                ForEach(0..<3, id: \.self) { index in
+                    introductionMessage(index)
                         .font(MOEUMTypography.buttonMedium)
-                        .fontWeight(index == messages.count - 1 ? .bold : .medium)
-                        .foregroundStyle(Color.moeumGray500)
                         .tag(index)
                 }
             }
@@ -32,8 +24,8 @@ struct IntroductionView: View {
             PageDots(selection: page, count: messages.count)
                 .padding(.bottom, 18)
 
-            MOEUMButton(title: page == messages.count - 1 ? "시작하기" : "다음") {
-                if page < messages.count - 1 {
+            MOEUMButton(title: page == 2 ? "시작하기" : "다음") {
+                if page < 2 {
                     withAnimation { page += 1 }
                 } else {
                     onFinished()
@@ -43,6 +35,26 @@ struct IntroductionView: View {
         .padding(.horizontal, 20)
         .padding(.bottom, 18)
         .background(Color.white)
+    }
+
+    @ViewBuilder
+    private func introductionMessage(_ index: Int) -> some View {
+        switch index {
+        case 0:
+            (Text("당신의 ").foregroundStyle(Color.moeumGray400)
+             + Text("AI").foregroundStyle(Color.moeumMain500)
+             + Text("를 선택해 ").foregroundStyle(Color.moeumGray400)
+             + Text("함께").foregroundStyle(Color.moeumMain500)
+             + Text(" 성장해보세요.").foregroundStyle(Color.moeumGray400))
+        case 1:
+            (Text("질의응답 형태로\n").foregroundStyle(Color.moeumGray400)
+             + Text("당신의 지식").foregroundStyle(Color.moeumMain500)
+             + Text("을 습득해 성장할 거예요.").foregroundStyle(Color.moeumGray400))
+        default:
+            (Text("플래시 카드, 주관식 문제 등\n").foregroundStyle(Color.moeumGray400)
+             + Text("다양한 형태").foregroundStyle(Color.moeumMain500)
+             + Text("로 학습할 수 있어요.").foregroundStyle(Color.moeumGray400))
+        }
     }
 }
 
