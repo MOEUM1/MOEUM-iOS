@@ -9,6 +9,8 @@ struct HomeView: View {
     @State private var isExamPresented = false
     @State private var character: CharacterDetail?
     @State private var streak: StreakResponse?
+    @State private var isSadMascotAnimating = false
+    @State private var isHappyMascotAnimating = false
     private let weekdays = ["월", "화", "수", "목", "금", "토", "일"]
 
     var body: some View {
@@ -35,6 +37,14 @@ struct HomeView: View {
         }
         .onChange(of: isExamPresented) { _, isPresented in
             if !isPresented { Task { await loadDashboard() } }
+        }
+        .onAppear {
+            withAnimation(.easeInOut(duration: 0.8).repeatForever(autoreverses: true)) {
+                isSadMascotAnimating = true
+            }
+            withAnimation(.easeInOut(duration: 0.42).repeatForever(autoreverses: true)) {
+                isHappyMascotAnimating = true
+            }
         }
     }
 
@@ -164,10 +174,30 @@ struct HomeView: View {
 
     private func levelMascot(label: String, scale: CGFloat, isCurrent: Bool) -> some View {
         VStack(spacing: 0) {
-            Image(theme.assetName)
-                .resizable()
-                .scaledToFit()
-                .frame(width: scale, height: 70)
+            ZStack(alignment: .topTrailing) {
+                Image(theme.assetName)
+                    .resizable()
+                    .scaledToFit()
+                    .frame(width: scale, height: 70)
+                    .offset(y: isCurrent && isSadMascotAnimating ? 2 : 0)
+                    .rotationEffect(.degrees(!isCurrent && isHappyMascotAnimating ? 4 : 0), anchor: .bottom)
+
+                if isCurrent {
+                    Text("ㅜㅠ")
+                        .font(.system(size: 13, weight: .bold))
+                        .foregroundStyle(theme.accentColor)
+                        .offset(x: 11, y: -7)
+                        .opacity(isSadMascotAnimating ? 1 : 0.35)
+                }
+
+                if !isCurrent {
+                    Text("Hi!")
+                        .font(.system(size: 11, weight: .bold))
+                        .foregroundStyle(theme.accentColor)
+                        .offset(x: 15, y: -9)
+                        .opacity(isHappyMascotAnimating ? 1 : 0.45)
+                }
+            }
             Text(label)
                 .font(MOEUMTypography.buttonSmallMedium)
                 .foregroundStyle(isCurrent ? theme.accentColor : Color.moeumGray500)
