@@ -15,12 +15,12 @@ struct IntroductionView: View {
             TabView(selection: $page) {
                 ForEach(0..<3, id: \.self) { index in
                     introductionMessage(index)
-                        .font(MOEUMTypography.buttonMedium)
                         .tag(index)
                 }
             }
             .tabViewStyle(.page(indexDisplayMode: .never))
-            .frame(height: 80)
+            .frame(maxWidth: .infinity)
+            .frame(height: 48)
 
             PageDots(selection: page, count: 3)
                 .padding(.bottom, 18)
@@ -42,19 +42,31 @@ struct IntroductionView: View {
     private func introductionMessage(_ index: Int) -> some View {
         switch index {
         case 0:
-            (Text("당신의 ").foregroundStyle(Color.moeumGray400)
-             + Text("AI").foregroundStyle(Color.moeumMain500)
-             + Text("를 선택해 ").foregroundStyle(Color.moeumGray400)
-             + Text("함께").foregroundStyle(Color.moeumMain500)
-             + Text(" 성장해보세요.").foregroundStyle(Color.moeumGray400))
+            Text("당신의 ")
+                .foregroundStyle(Color.moeumGray400)
+            + Text("AI").foregroundStyle(Color.moeumMain500)
+            + Text("를 선택해 ").foregroundStyle(Color.moeumGray400)
+            + Text("함께").foregroundStyle(Color.moeumMain500)
+            + Text(" 성장해보세요.").foregroundStyle(Color.moeumGray400)
+                .font(MOEUMTypography.buttonMedium)
         case 1:
-            (Text("질의응답 형태로\n").foregroundStyle(Color.moeumGray400)
-             + Text("당신의 지식").foregroundStyle(Color.moeumMain500)
-             + Text("을 습득해 성장할 거예요.").foregroundStyle(Color.moeumGray400))
+            VStack(spacing: 0) {
+                Text("질의응답 형태로")
+                    .foregroundStyle(Color.moeumGray400)
+                (Text("당신의 지식").foregroundStyle(Color.moeumMain500)
+                 + Text("을 습득해 성장할 거예요.").foregroundStyle(Color.moeumGray400))
+            }
+            .font(MOEUMTypography.buttonMedium)
+            .multilineTextAlignment(.center)
         default:
-            (Text("플래시 카드, 주관식 문제 등\n").foregroundStyle(Color.moeumGray400)
-             + Text("다양한 형태").foregroundStyle(Color.moeumMain500)
-             + Text("로 학습할 수 있어요.").foregroundStyle(Color.moeumGray400))
+            VStack(spacing: 0) {
+                Text("플래시 카드, 주관식 문제 등")
+                    .foregroundStyle(Color.moeumGray400)
+                (Text("다양한 형태").foregroundStyle(Color.moeumMain500)
+                 + Text("로 학습할 수 있어요.").foregroundStyle(Color.moeumGray400))
+            }
+            .font(MOEUMTypography.buttonMedium)
+            .multilineTextAlignment(.center)
         }
     }
 }
