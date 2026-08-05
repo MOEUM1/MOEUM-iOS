@@ -21,6 +21,7 @@ struct APIClient: Sendable {
         accessToken: String? = nil
     ) async throws -> Response {
         var request = URLRequest(url: makeURL(for: path))
+        request.timeoutInterval = 10
         request.httpMethod = method.rawValue
         request.setValue("application/json", forHTTPHeaderField: "Accept")
 
