@@ -11,7 +11,7 @@ struct WelcomeView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 18) {
             Text("환영해요!\n오늘부터 함께 성장해볼까요?")
-                .font(MOEUMTypography.h2Bold)
+                .font(.system(size: 30, weight: .bold))
                 .foregroundStyle(Color.moeumGray900)
 
             MOEUMTextField(title: "이메일", placeholder: "이메일 입력", text: $email)
