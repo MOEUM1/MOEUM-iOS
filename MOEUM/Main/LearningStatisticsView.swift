@@ -3,6 +3,7 @@ import SwiftUI
 
 struct LearningStatisticsView: View {
     let theme: CharacterTheme
+    @State private var animateWeeklyBars = false
     private let firstMonths = ["SEP", "OCT", "NOV", "DEC", "JAN", "FEB"]
     private let secondMonths = ["MAR", "APR", "MAY", "JUN", "JUL", "AUG"]
     private let weeklyData = [
@@ -86,7 +87,7 @@ struct LearningStatisticsView: View {
             Chart(weeklyData) { item in
                 BarMark(
                     x: .value("요일", item.day),
-                    y: .value("학습 시간", item.minutes)
+                    y: .value("학습 시간", animateWeeklyBars ? item.minutes : 0)
                 )
                 .foregroundStyle(item.day == "수" ? theme.accentColor : Color.moeumGray300)
                 .cornerRadius(4)
@@ -104,11 +105,18 @@ struct LearningStatisticsView: View {
                 }
             }
             .frame(height: 210)
+            .animation(.interpolatingSpring(stiffness: 170, damping: 10), value: animateWeeklyBars)
         }
         .padding(20)
         .frame(maxWidth: .infinity, minHeight: 278, alignment: .topLeading)
         .background(Color.white)
         .clipShape(RoundedRectangle(cornerRadius: 12))
+        .onAppear {
+            animateWeeklyBars = false
+            withAnimation(.interpolatingSpring(stiffness: 170, damping: 10).delay(0.08)) {
+                animateWeeklyBars = true
+            }
+        }
     }
 }
 
