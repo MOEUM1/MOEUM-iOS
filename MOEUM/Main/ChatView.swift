@@ -80,6 +80,11 @@ struct ChatView: View {
                             .id(message.id)
                     }
 
+                    if isSending {
+                        TypingIndicator(theme: theme)
+                            .transition(.opacity.combined(with: .move(edge: .bottom)))
+                    }
+
                     if let errorMessage {
                         Text(errorMessage)
                             .font(MOEUMTypography.buttonSmallMedium)
@@ -121,7 +126,48 @@ struct ChatView: View {
         .frame(maxWidth: .infinity)
     }
 
-    private var messageComposer: some View {
+private struct TypingIndicator: View {
+    let theme: CharacterTheme
+    @State private var isAnimating = false
+
+    var body: some View {
+        HStack {
+            HStack(spacing: 5) {
+                ForEach(0..<3, id: \.self) { index in
+                    Circle()
+                        .fill(theme.accentColor)
+                        .frame(width: 7, height: 7)
+                        .scaleEffect(isAnimating ? 1 : 0.55)
+                        .opacity(isAnimating ? 1 : 0.45)
+                        .animation(
+                            .easeInOut(duration: 0.5)
+                                .repeatForever()
+                                .delay(Double(index) * 0.14),
+                            value: isAnimating
+                        )
+                }
+            }
+            .padding(.horizontal, 17)
+            .padding(.vertical, 13)
+            .background(Color.moeumGray50)
+            .clipShape(
+                UnevenRoundedRectangle(
+                    topLeadingRadius: 10,
+                    bottomLeadingRadius: 0,
+                    bottomTrailingRadius: 25,
+                    topTrailingRadius: 25
+                )
+            )
+            Spacer(minLength: 54)
+        }
+        .frame(maxWidth: .infinity)
+        .accessibilityLabel("AI가 답변을 입력하고 있어요")
+        .onAppear { isAnimating = true }
+        .onDisappear { isAnimating = false }
+    }
+}
+
+private var messageComposer: some View {
         HStack(spacing: 10) {
             TextField("메시지 입력 ...", text: $input, axis: .vertical)
                 .font(MOEUMTypography.buttonSmallMedium)
