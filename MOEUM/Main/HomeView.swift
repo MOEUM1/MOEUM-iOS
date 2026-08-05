@@ -56,8 +56,10 @@ struct HomeView: View {
         HStack(spacing: 8) {
             Image("LearningFire")
                 .resizable()
+                .renderingMode(.template)
                 .scaledToFit()
                 .frame(width: 60, height: 60)
+                .foregroundStyle(streakCount >= 2 ? theme.accentColor : Color.moeumGray300)
 
             VStack(alignment: .leading, spacing: 9) {
                 (Text("연속 학습 ") + Text("\(streak?.count ?? 0)").foregroundColor(theme.accentColor) + Text("일"))
@@ -69,7 +71,7 @@ struct HomeView: View {
                             .font(MOEUMTypography.buttonSmallMedium)
                             .foregroundStyle(.white)
                             .frame(width: 26, height: 26)
-                            .background(index < min(streak?.count ?? 0, weekdays.count) ? theme.accentColor : Color.moeumGray50)
+                            .background(index < min(streakCount, weekdays.count) ? theme.accentColor : Color.moeumGray50)
                             .clipShape(Circle())
                     }
                 }
@@ -176,6 +178,10 @@ struct HomeView: View {
         let target = character.exp + character.expToNextLevel
         guard target > 0 else { return 0 }
         return min(max(CGFloat(character.exp) / CGFloat(target), 0), 1)
+    }
+
+    private var streakCount: Int {
+        streak?.count ?? 0
     }
 
     private func levelMascot(label: String, scale: CGFloat, isCurrent: Bool) -> some View {
