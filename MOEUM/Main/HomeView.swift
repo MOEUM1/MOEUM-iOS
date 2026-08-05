@@ -11,6 +11,7 @@ struct HomeView: View {
     @State private var streak: StreakResponse?
     @State private var isSadMascotAnimating = false
     @State private var isHappyMascotAnimating = false
+    @State private var isLearningMascotAnimating = false
     private let weekdays = ["월", "화", "수", "목", "금", "토", "일"]
 
     var body: some View {
@@ -44,6 +45,9 @@ struct HomeView: View {
             }
             withAnimation(.easeInOut(duration: 0.42).repeatForever(autoreverses: true)) {
                 isHappyMascotAnimating = true
+            }
+            withAnimation(.easeInOut(duration: 1.1).repeatForever(autoreverses: true)) {
+                isLearningMascotAnimating = true
             }
         }
     }
@@ -92,6 +96,8 @@ struct HomeView: View {
                 .resizable()
                 .scaledToFit()
                 .frame(width: 144, height: 156)
+                .offset(y: isLearningMascotAnimating ? -6 : 0)
+                .rotationEffect(.degrees(isLearningMascotAnimating ? 2 : -2), anchor: .bottom)
                 .id(theme)
 
             Spacer(minLength: 8)
