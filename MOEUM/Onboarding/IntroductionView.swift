@@ -6,8 +6,9 @@ struct IntroductionView: View {
 
     var body: some View {
         VStack {
-            MOEUMWordmark(size: 64)
-                .padding(.top, 85)
+            // Figma node 47:2512: 129pt-wide wordmark centered at y≈165.
+            MOEUMWordmark(size: 36)
+                .padding(.top, 105)
 
             Spacer()
 
