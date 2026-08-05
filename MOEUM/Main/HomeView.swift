@@ -186,7 +186,15 @@ struct HomeView: View {
                     .scaledToFit()
                     .frame(width: scale, height: 70)
                     .offset(y: isCurrent && isSadMascotAnimating ? 2 : 0)
+                    .offset(y: !isCurrent && isHappyMascotAnimating ? -4 : 0)
+                    .scaleEffect(!isCurrent && isHappyMascotAnimating ? 1.03 : 1)
                     .rotationEffect(.degrees(!isCurrent && isHappyMascotAnimating ? 4 : 0), anchor: .bottom)
+
+                if isCurrent {
+                    SadMascotFace(color: theme.accentColor)
+                        .frame(width: 24, height: 14)
+                        .offset(y: -7)
+                }
 
             }
             Text(label)
@@ -201,6 +209,22 @@ struct HomeView: View {
         async let streakRequest = APIClient.shared.myStreak(accessToken: accessToken)
         character = (try? await characterRequest)?.character
         streak = try? await streakRequest
+    }
+}
+
+private struct SadMascotFace: View {
+    let color: Color
+
+    var body: some View {
+        Canvas { context, size in
+            let cover = Path(roundedRect: CGRect(x: 2, y: 4, width: size.width - 4, height: 7), cornerRadius: 3.5)
+            context.fill(cover, with: .color(color))
+
+            var mouth = Path()
+            mouth.move(to: CGPoint(x: 7, y: 6))
+            mouth.addQuadCurve(to: CGPoint(x: size.width - 7, y: 6), control: CGPoint(x: size.width / 2, y: 0))
+            context.stroke(mouth, with: .color(.black), style: StrokeStyle(lineWidth: 1.5, lineCap: .round))
+        }
     }
 }
 
