@@ -11,7 +11,9 @@ struct WelcomeView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 18) {
             Text("환영해요!\n오늘부터 함께 성장해볼까요?")
-                .font(MOEUMTypography.h1Bold)
+                // Keep the Figma scale fixed; relative Dynamic Type scaling made this
+                // headline render substantially larger in the simulator.
+                .font(.custom("Pretendard-Bold", size: 24))
                 .foregroundStyle(Color.moeumGray900)
 
             MOEUMTextField(title: "이메일", placeholder: "이메일 입력", text: $email)
