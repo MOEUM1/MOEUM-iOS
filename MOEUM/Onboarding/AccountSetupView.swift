@@ -38,7 +38,7 @@ struct AccountSetupView: View {
                 onContinue(email, password)
             }
         }
-        .padding(.horizontal, 20)
+        .padding(.horizontal, 24)
         .padding(.top, 10)
         .padding(.bottom, 18)
         .background(Color.white)

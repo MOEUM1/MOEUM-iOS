@@ -47,7 +47,7 @@ struct WelcomeView: View {
                 Task { await signIn() }
             }
         }
-        .padding(.horizontal, 20)
+        .padding(.horizontal, 24)
         .padding(.top, 34)
         .padding(.bottom, 18)
         .background(Color.white)
