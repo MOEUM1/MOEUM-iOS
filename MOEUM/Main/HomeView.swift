@@ -188,21 +188,6 @@ struct HomeView: View {
                     .offset(y: isCurrent && isSadMascotAnimating ? 2 : 0)
                     .rotationEffect(.degrees(!isCurrent && isHappyMascotAnimating ? 4 : 0), anchor: .bottom)
 
-                if isCurrent {
-                    Text("ㅜㅠ")
-                        .font(.system(size: 13, weight: .bold))
-                        .foregroundStyle(theme.accentColor)
-                        .offset(x: 11, y: -7)
-                        .opacity(isSadMascotAnimating ? 1 : 0.35)
-                }
-
-                if !isCurrent {
-                    Text("Hi!")
-                        .font(.system(size: 11, weight: .bold))
-                        .foregroundStyle(theme.accentColor)
-                        .offset(x: 15, y: -9)
-                        .opacity(isHappyMascotAnimating ? 1 : 0.45)
-                }
             }
             Text(label)
                 .font(MOEUMTypography.buttonSmallMedium)
